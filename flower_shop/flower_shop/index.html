@@ -7,7 +7,8 @@
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
   <!-- Google Font & Custom CSS -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 
@@ -16,6 +17,9 @@
       background-color: #faf9f7;
       font-family: 'Roboto', sans-serif;
       color: #2f2f2f;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
     /* HEADER */
@@ -24,6 +28,7 @@
       border-bottom: 1px solid #eee;
       padding: 15px 0;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      flex-shrink: 0;
     }
 
     .logo {
@@ -45,6 +50,7 @@
       background-color: #fff8f0 !important;
       border-top: 1px solid #eee;
       border-bottom: 1px solid #eee;
+      flex-shrink: 0;
     }
 
     .navbar-nav .nav-link {
@@ -61,91 +67,252 @@
       color: #b08c3a !important;
     }
 
-    /* BANNER */
-    .banner {
-      position: relative;
-      background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;
-      height: 500px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: white;
+    /* MAIN CONTENT - Chiếm không gian còn lại */
+    .main-content {
+      flex: 1 0 auto;
+      width: 100%;
     }
 
-    .banner::after {
+    /* CAROUSEL BANNER - ĐÃ ĐIỀU CHỈNH KÍCH THƯỚC */
+    .hero-carousel {
+      height: 65vh; /* Giảm từ 600px xuống 65% chiều cao viewport */
+      min-height: 450px; /* Đảm bảo không quá nhỏ */
+      max-height: 600px; /* Giới hạn chiều cao tối đa */
+      overflow: hidden;
+    }
+
+    .carousel-item {
+      height: 100%;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      position: relative;
+    }
+
+    .carousel-item::after {
       content: "";
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.4);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.4) 0%,
+        rgba(0, 0, 0, 0.2) 50%,
+        rgba(0, 0, 0, 0.4) 100%
+      );
     }
 
-    .banner-content {
-      position: relative;
+    .carousel-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: white;
       z-index: 2;
+      width: 80%;
+      max-width: 800px;
     }
 
-    .banner h1 {
+    .carousel-title {
       font-family: 'Playfair Display', serif;
-      font-size: 58px;
+      font-size: 2.8rem; /* Giảm kích thước chữ */
       font-weight: 700;
-      letter-spacing: 3px;
-      color: #fff;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s ease-out 0.5s forwards;
     }
 
-    .banner p {
-      font-size: 18px;
-      margin-top: 15px;
-      color: #f0e6d2;
-      letter-spacing: 1px;
+    .carousel-subtitle {
+      font-size: 1.2rem; /* Giảm kích thước chữ */
+      margin-bottom: 1.5rem;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s ease-out 0.8s forwards;
     }
 
     .btn-luxe {
-      margin-top: 30px;
       padding: 12px 35px;
-      background-color: #b08c3a;
+      background: linear-gradient(135deg, #b08c3a 0%, #d4af37 100%);
       color: #fff;
       border: none;
       font-weight: 600;
       border-radius: 30px;
-      transition: 0.3s;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s ease-out 1.1s forwards;
+      box-shadow: 0 4px 15px rgba(176, 140, 58, 0.3);
     }
 
     .btn-luxe:hover {
-      background-color: #d4af37;
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(176, 140, 58, 0.5);
+      background: linear-gradient(135deg, #d4af37 0%, #b08c3a 100%);
     }
 
-    /* FOOTER */
+    /* Carousel Controls Customization */
+    .carousel-control-prev,
+    .carousel-control-next {
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+      margin: 0 15px;
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+      background: rgba(176, 140, 58, 0.8);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+      width: 20px;
+      height: 20px;
+      filter: invert(1);
+    }
+
+    /* Carousel Indicators */
+    .carousel-indicators {
+      bottom: 20px;
+    }
+
+    .carousel-indicators button {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin: 0 6px;
+      background-color: rgba(255, 255, 255, 0.5);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .carousel-indicators button.active {
+      background-color: #b08c3a;
+      transform: scale(1.3);
+      border-color: white;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* FOOTER - ĐẢM BẢO HIỂN THỊ */
     footer {
       background: #1e1a16;
       color: #d4c7a0;
       text-align: center;
-      padding: 40px 0;
-      margin-top: 50px;
+      padding: 30px 0;
+      flex-shrink: 0;
+      width: 100%;
+      margin-top: auto; /* Đẩy footer xuống dưới cùng */
     }
 
     footer h5 {
       font-family: 'Playfair Display', serif;
-      font-size: 20px;
-      margin-bottom: 15px;
+      font-size: 18px;
+      margin-bottom: 12px;
     }
 
     footer p {
       font-size: 14px;
       color: #b9a97d;
+      margin-bottom: 8px;
     }
 
     footer a {
       color: #d4af37;
       text-decoration: none;
-      margin: 0 10px;
-      font-size: 18px;
+      margin: 0 8px;
+      font-size: 16px;
     }
 
     footer a:hover {
       color: #fff;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-carousel {
+        height: 55vh;
+        min-height: 400px;
+        max-height: 500px;
+      }
+
+      .carousel-title {
+        font-size: 2.2rem;
+      }
+
+      .carousel-subtitle {
+        font-size: 1rem;
+      }
+
+      .carousel-control-prev,
+      .carousel-control-next {
+        width: 45px;
+        height: 45px;
+        margin: 0 10px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .hero-carousel {
+        height: 50vh;
+        min-height: 350px;
+        max-height: 450px;
+      }
+
+      .carousel-title {
+        font-size: 1.8rem;
+      }
+
+      .carousel-subtitle {
+        font-size: 0.9rem;
+      }
+
+      .btn-luxe {
+        padding: 10px 25px;
+        font-size: 0.9rem;
+      }
+
+      .carousel-control-prev,
+      .carousel-control-next {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .carousel-indicators {
+        bottom: 15px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .hero-carousel {
+        height: 45vh;
+        min-height: 300px;
+      }
+      
+      .carousel-title {
+        font-size: 1.5rem;
+      }
     }
   </style>
 </head>
@@ -170,30 +337,95 @@
       </button>
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
         <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link" href="#">Trang chủ</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html">Trang chủ</a></li>
           <li class="nav-item"><a class="nav-link" href="frontend/main/order_online.php">Bộ sưu tập</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Liên hệ</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Giới Thiệu</a></li>
+          <li class="nav-item"><a class="nav-link" href="frontend/main/contact.php">Liên hệ</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">Giới Thiệu</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <!-- BANNER -->
-  <section class="banner">
-    <div class="banner-content">
-      <h1>Vẻ Đẹp Đỉnh Cao Của Từng Cánh Hoa</h1>
-      <p>“Mỗi đóa hoa, một cảm xúc – Flower’Lna đồng hành cùng trái tim bạn.”</p>
-      <button class="btn-luxe">Khám Phá Ngay</button>
-    </div>
-  </section>
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <!-- CAROUSEL BANNER - ĐÃ ĐIỀU CHỈNH KÍCH THƯỚC -->
+    <div id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel" data-bs-interval="4000">
+      <!-- Indicators -->
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="3"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="4"></button>
+      </div>
 
-  <!-- FOOTER -->
+      <!-- Carousel Items -->
+      <div class="carousel-inner h-100">
+      <!-- Slide 1 - Hoa Hồng Sang Trọng -->
+      <div class="carousel-item active h-100" style="background-image: url('https://images.unsplash.com/photo-1705199155732-cf88018ad0c5?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=684')">
+          <div class="carousel-content">
+              <h1 class="carousel-title">Vẻ Đẹp Tinh Khiết</h1>
+              <p class="carousel-subtitle">Những đóa hồng trắng tượng trưng cho sự thuần khiết và thanh tao</p>
+              <a href="frontend/main/order_online.php" class="btn btn-luxe">Khám Phá Ngay</a>
+          </div>
+      </div>
+
+      <!-- Slide 2 - Hoa Cẩm Tú Cầu -->
+      <div class="carousel-item h-100" style="background-image: url('https://plus.unsplash.com/premium_photo-1675712535056-fc6fa6aee8ec?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1169')">
+          <div class="carousel-content">
+              <h1 class="carousel-title">Cẩm Tú Cầu Thanh Lịch</h1>
+              <p class="carousel-subtitle">Vẻ đẹp tinh tế và sang trọng</p>
+              <a href="frontend/main/order_online.php" class="btn btn-luxe">Khám Phá</a>
+          </div>
+      </div>
+
+      <!-- Slide 3 - Hoa Tulip -->
+      <div class="carousel-item h-100" style="background-image: url('https://images.unsplash.com/photo-1716401018010-5985699c5e91?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1174')">
+          <div class="carousel-content">
+              <h1 class="carousel-title">Tulip Tươi Sáng</h1>
+              <p class="carousel-subtitle">Mang đến không gian tươi mới</p>
+              <a href="frontend/main/order_online.php" class="btn btn-luxe">Mua Ngay</a>
+          </div>
+      </div>
+
+      <!-- Slide 4 - Hoa Lan Quý Phái -->
+      <div class="carousel-item h-100" style="background-image: url('https://images.unsplash.com/photo-1642477216650-80cd042b8566?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170')">
+          <div class="carousel-content">
+              <h1 class="carousel-title">Lan Quý Phái</h1>
+              <p class="carousel-subtitle">Vẻ đẹp đẳng cấp và tinh tế</p>
+              <a href="frontend/main/order_online.php" class="btn btn-luxe">Xem Ngay</a>
+          </div>
+      </div>
+
+      <!-- Slide 5 - Hoa Hướng Dương -->
+      <div class="carousel-item h-100" style="background-image: url('https://images.unsplash.com/photo-1626576842773-576a5b58945a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1946')">
+          <div class="carousel-content">
+              <h1 class="carousel-title">Hướng Dương Rực Rỡ</h1>
+              <p class="carousel-subtitle">Mang đến năng lượng tích cực</p>
+              <a href="frontend/main/order_online.php" class="btn btn-luxe">Đặt Hoa</a>
+          </div>
+      </div>
+  </div>
+
+      <!-- Controls -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+  </div>
+
+  <!-- FOOTER - GIỜ ĐÃ HIỂN THỊ ĐÚNG -->
   <footer>
     <div class="container">
-      <h5>Flower'Lna - Hoa Thượng Lưu</h5>
-      <p>Địa chỉ: 88 Nguyễn Huệ, Quận 1, TP.HCM<br>
-      Hotline: 1800 88 88 88 | Email: contact@FlowerLna.vn</p>
+      <h5>Flower'Lna – Tinh tế trong từng chi tiết</h5>
+      <p>Địa chỉ: 52 Đ. Lê Lai, Phường 1, Gò Vấp, TP.HCM</p>
+      <p>Hotline: 1800 88 88 88 | Email: contact@FlowerLna.vn</p>
       <div>
         <a href="#"><i class="bi bi-facebook"></i></a>
         <a href="#"><i class="bi bi-instagram"></i></a>
@@ -206,5 +438,41 @@
   <!-- Bootstrap JS + jQuery -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Thêm hiệu ứng mượt mà cho carousel
+    $(document).ready(function() {
+      // Tự động chuyển slide mỗi 4 giây
+      $('#heroCarousel').carousel({
+        interval: 4000,
+        pause: 'hover',
+        wrap: true
+      });
+
+      // Thêm hiệu ứng khi slide thay đổi
+      $('#heroCarousel').on('slide.bs.carousel', function() {
+        // Reset animation cho slide mới
+        $('.carousel-title, .carousel-subtitle, .btn-luxe').css({
+          'opacity': '0',
+          'transform': 'translateY(30px)'
+        });
+      });
+
+      $('#heroCarousel').on('slid.bs.carousel', function() {
+        // Kích hoạt animation cho slide hiện tại
+        setTimeout(function() {
+          $('.carousel-item.active .carousel-title').css({
+            'animation': 'fadeInUp 1s ease-out 0.5s forwards'
+          });
+          $('.carousel-item.active .carousel-subtitle').css({
+            'animation': 'fadeInUp 1s ease-out 0.8s forwards'
+          });
+          $('.carousel-item.active .btn-luxe').css({
+            'animation': 'fadeInUp 1s ease-out 1.1s forwards'
+          });
+        }, 100);
+      });
+    });
+  </script>
 </body>
 </html>

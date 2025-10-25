@@ -60,6 +60,11 @@
             outline: none;
         }
         
+        .form-control-custom.error {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+        }
+        
         .form-label-custom {
             font-weight: 600;
             color: var(--dark);
@@ -92,6 +97,17 @@
         
         .text-primary {
             color: var(--primary) !important;
+        }
+        
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
         }
     </style>
 </head>
@@ -126,6 +142,9 @@
                             <div class="mb-4">
                                 <label class="form-label-custom">Email</label>
                                 <input type="email" id="email" class="form-control-custom" placeholder="your@email.com">
+                                <div class="error-message" id="emailError">
+                                    <i class="fas fa-exclamation-circle me-1"></i>Email không hợp lệ. Vui lòng nhập email có chứa ký tự '@'
+                                </div>
                             </div>
 
                             <div class="mb-4">
@@ -193,7 +212,37 @@
     $(document).ready(function() {
         displayCheckoutSummary();
         setMinDeliveryDate();
+        
+        // Thêm sự kiện validate email khi người dùng rời khỏi trường email
+        $('#email').on('blur', function() {
+            validateEmail();
+        });
+        
+        // Thêm sự kiện validate email khi người dùng nhập
+        $('#email').on('input', function() {
+            // Nếu đang hiển thị lỗi và người dùng bắt đầu sửa, ẩn lỗi đi
+            if ($(this).hasClass('error')) {
+                $(this).removeClass('error');
+                $('#emailError').removeClass('show');
+            }
+        });
     });
+
+    function validateEmail() {
+        const email = $('#email').val().trim();
+        const emailError = $('#emailError');
+        
+        // Nếu có nhập email nhưng không có ký tự @
+        if (email && !email.includes('@')) {
+            $('#email').addClass('error');
+            emailError.addClass('show');
+            return false;
+        } else {
+            $('#email').removeClass('error');
+            emailError.removeClass('show');
+            return true;
+        }
+    }
 
     function displayCheckoutSummary() {
         const cart = JSON.parse(localStorage.getItem('flower_cart') || '[]');
@@ -245,6 +294,13 @@
         if (!address) {
             alert('Vui lòng nhập địa chỉ giao hàng!');
             $('#address').focus();
+            return;
+        }
+
+        // Validate email trước khi tiếp tục
+        if (!validateEmail()) {
+            alert('Vui lòng nhập địa chỉ email hợp lệ!');
+            $('#email').focus();
             return;
         }
 

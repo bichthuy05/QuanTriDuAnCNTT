@@ -109,10 +109,33 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         
+        /* MENU - THÊM MỚI */
+        .navbar-custom {
+            background-color: #fff8f0 !important;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            padding: 0.5rem 0;
+        }
+
+        .navbar-nav .nav-link-custom {
+            color: #3b2d1f !important;
+            font-weight: 500;
+            font-size: 16px;
+            margin: 0 10px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.8rem 1rem;
+        }
+
+        .navbar-nav .nav-link-custom:hover {
+            color: #b08c3a !important;
+        }
+        
         /* HERO SECTION - ĐÃ CẬP NHẬT */
         .hero-section-beautiful {
             position: relative;
-            background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;
+            background: url('https://plus.unsplash.com/premium_photo-1675712535056-fc6fa6aee8ec?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1169') center/cover no-repeat;
             height: 380px;
             display: flex;
             align-items: center;
@@ -431,6 +454,23 @@
             </div>
         </div>
     </header>
+
+    <!-- MENU - THÊM MỚI -->
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="../../index.html">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom active" href="order_online.php">Bộ sưu tập</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="contact.php">Liên hệ</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="../../about.html">Giới Thiệu</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
     <!-- HERO SECTION - ĐÃ CẬP NHẬT -->
     <section class="hero-section-beautiful">

@@ -179,12 +179,46 @@
                                 </div>
                             </label>
 
-                            <!-- BANK TRANSFER -->
-                            <label class="payment-option" onclick="selectPayment('transfer')">
-                                <input type="radio" name="payment" value="transfer" style="display:none;">
+                            <!-- ZALOPAY -->
+                            <label class="payment-option" onclick="selectPayment('zalopay')">
+                                <input type="radio" name="payment" value="zalopay" style="display:none;">
                                 <div class="d-flex align-items-start">
                                     <div class="form-check mt-1 me-3">
-                                        <input type="radio" name="payment" value="transfer" class="form-check-input">
+                                        <input type="radio" name="payment" value="zalopay" class="form-check-input" style="width: 18px; height: 18px;">
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex align-items-center mb-1">
+                                            <span class="payment-icon">📲</span>
+                                            <h6 class="payment-method-title mb-0">ZaloPay</h6>
+                                        </div>
+                                        <p class="payment-method-desc">Thanh toán qua ứng dụng ZaloPay</p>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <!-- VNPAY -->
+                            <label class="payment-option" onclick="selectPayment('vnpay')">
+                                <input type="radio" name="payment" value="vnpay" style="display:none;">
+                                <div class="d-flex align-items-start">
+                                    <div class="form-check mt-1 me-3">
+                                        <input type="radio" name="payment" value="vnpay" class="form-check-input" style="width: 18px; height: 18px;">
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex align-items-center mb-1">
+                                            <span class="payment-icon">💳</span>
+                                            <h6 class="payment-method-title mb-0">VNPay</h6>
+                                        </div>
+                                        <p class="payment-method-desc">Thanh toán qua ứng dụng VNPay hoặc tài khoản ngân hàng</p>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <!-- BANK TRANSFER-->
+                            <label class="payment-option" onclick="selectPayment('bank')">
+                                <input type="radio" name="payment" value="bank" style="display:none;">
+                                <div class="d-flex align-items-start">
+                                    <div class="form-check mt-1 me-3">
+                                        <input type="radio" name="payment" value="bank" class="form-check-input">
                                     </div>
                                     <div class="flex-grow-1">
                                         <div class="d-flex align-items-center mb-1">
@@ -292,11 +326,103 @@
     }
 
     function submitPayment() {
-        alert('Đặt hàng thành công!');
-        localStorage.removeItem('flower_cart');
-        localStorage.removeItem('checkout_form');
-        window.location.href = 'order_online.php';
+    const paymentMethod = $('input[name="payment"]:checked').val();
+    
+    if (!paymentMethod) {
+        alert('Vui lòng chọn hình thức thanh toán');
+        return;
     }
+
+    const formData = JSON.parse(localStorage.getItem('checkout_form') || '{}');
+    
+    if (!formData.fullName || !formData.phone || !formData.address) {
+        alert('Vui lòng nhập đầy đủ thông tin khách hàng trước');
+        window.location.href = 'checkout.php';
+        return;
+    }
+
+    const cart = JSON.parse(localStorage.getItem('flower_cart') || '[]');
+    
+    if (cart.length === 0) {
+        alert('Giỏ hàng trống. Vui lòng thêm sản phẩm vào giỏ hàng trước khi đặt hàng.');
+        window.location.href = '../products/';
+        return;
+    }
+
+    // Tính tổng tiền
+    let total = 0;
+    cart.forEach(item => {
+        total += item.gia * item.so_luong;
+    });
+    const vat = Math.round(total * 0.1);
+    const totalWithVAT = total + vat;
+
+    const orderData = {
+        ten_khach: formData.fullName,
+        email: formData.email || '',
+        sdt: formData.phone,
+        dia_chi: formData.address,
+        ngay_giao: formData.deliveryDate || '',
+        ghi_chu: formData.note || '',
+        hinh_thuc_thanh_toan: paymentMethod,
+        cart: cart,
+        tong_tien: totalWithVAT
+    };
+
+    // PHÂN LOẠI PHƯƠNG THỨC THANH TOÁN
+    if (paymentMethod === 'cod') {
+        // COD: Tạo đơn hàng ngay lập tức
+        const btn = $('#submitBtn');
+        const originalText = btn.html();
+        btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Đang xử lý...');
+
+        $.ajax({
+            url: '../../api/order.php?action=create_order',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(orderData),
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 'success') {
+                    // Lưu thông tin đơn hàng thành công
+                    localStorage.setItem('order_success', JSON.stringify({
+                        orderId: response.ma_don_hang,
+                        totalAmount: totalWithVAT,
+                        paymentMethod: paymentMethod,
+                        customerName: formData.fullName,
+                        customerPhone: formData.phone,
+                        deliveryAddress: formData.address
+                    }));
+
+                    // Xóa giỏ hàng và form
+                    localStorage.removeItem('flower_cart');
+                    localStorage.removeItem('checkout_form');
+
+                    // Chuyển hướng đến trang thành công
+                    window.location.href = 'success.php';
+                } else {
+                    alert('Lỗi: ' + (response.message || 'Không thể tạo đơn hàng'));
+                    btn.prop('disabled', false).html(originalText);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Lỗi AJAX:', error);
+                alert('Lỗi kết nối với server. Vui lòng thử lại sau.');
+                btn.prop('disabled', false).html(originalText);
+            }
+        });
+    } else {
+        // Các phương thức QR: Lưu tạm và chuyển đến trang QR
+        localStorage.setItem('pending_order', JSON.stringify(orderData));
+        window.location.href = 'qr_payment.php?method=' + paymentMethod;
+    }
+}
+    // Xử lý phím Enter
+    $(document).on('keypress', function(e) {
+        if (e.which === 13) {
+            submitPayment();
+        }
+    });
     </script>
 </body>
 </html>

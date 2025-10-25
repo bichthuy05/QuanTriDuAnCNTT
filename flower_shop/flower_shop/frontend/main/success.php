@@ -267,7 +267,7 @@
                                 <i class="fas fa-headset me-3"></i>
                                 <div class="text-start">
                                     <strong class="d-block">Cần hỗ trợ?</strong>
-                                    <small>Liên hệ hotline: <strong>1900 1234</strong> hoặc email: <strong>support@flowerlna.com</strong></small>
+                                    <small>Liên hệ hotline: <strong>1800 88 88 88</strong> hoặc email: <strong>support@flowerlna.com</strong></small>
                                 </div>
                             </div>
                         </div>
