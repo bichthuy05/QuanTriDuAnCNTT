@@ -68,7 +68,7 @@
       <div class="page-header mb-4 d-flex justify-content-between align-items-center">
         <div>
           <h1 class="page-title">Quản lý Khách hàng</h1>
-          <p class="text-muted">Danh sách khách hàng mua hoa tại cửa hàng</p>
+          <p class="text-muted">Danh sách khách hàng của cửa hàng</p>
         </div>
         <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#modalKhachHang">
           <i class="bi bi-plus-circle me-2"></i>Thêm khách hàng
@@ -92,19 +92,15 @@
             <table class="table table-hover table-modern">
               <thead>
                 <tr>
-                  <th>Họ tên</th>
+                  <th>Tên khách hàng</th>
+                  <th>Số điện thoại</th>
                   <th>Email</th>
-                  <th>Điện thoại</th>
-                  <th>Giới tính</th>
                   <th>Địa chỉ</th>
-                  <th>Ngày đăng ký</th>
                   <th class="text-center" width="120">Thao tác</th>
                 </tr>
               </thead>
               <tbody id="tbodyKhachHang">
-                <tr>
-                  <td colspan="7" class="text-center py-4 text-muted">Đang tải dữ liệu...</td>
-                </tr>
+                <tr><td colspan="5" class="text-center py-4 text-muted">Đang tải dữ liệu...</td></tr>
               </tbody>
             </table>
           </div>
@@ -123,7 +119,7 @@
 
 <!-- MODAL THÊM/SỬA -->
 <div class="modal fade" id="modalKhachHang" tabindex="-1">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 id="modalTitle">Thêm Khách hàng</h5>
@@ -132,30 +128,21 @@
       <div class="modal-body">
         <form id="formKhachHang">
           <input type="hidden" id="MaKH">
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label>Họ tên</label>
-              <input type="text" class="form-control" id="HoTen" required>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label>Email</label>
-              <input type="email" class="form-control" id="Email">
-            </div>
-            <div class="col-md-6 mb-3">
-              <label>Điện thoại</label>
-              <input type="text" class="form-control" id="DienThoai" required>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label>Giới tính</label>
-              <select id="GioiTinh" class="form-select">
-                <option value="Nam">Nam</option>
-                <option value="Nữ">Nữ</option>
-              </select>
-            </div>
-            <div class="col-12 mb-3">
-              <label>Địa chỉ</label>
-              <input type="text" class="form-control" id="DiaChi">
-            </div>
+          <div class="mb-3">
+            <label>Tên khách hàng</label>
+            <input type="text" class="form-control" id="TenKhachHang" required>
+          </div>
+          <div class="mb-3">
+            <label>Số điện thoại</label>
+            <input type="text" class="form-control" id="SoDienThoai" required>
+          </div>
+          <div class="mb-3">
+            <label>Email</label>
+            <input type="email" class="form-control" id="Email">
+          </div>
+          <div class="mb-3">
+            <label>Địa chỉ</label>
+            <input type="text" class="form-control" id="DiaChi">
           </div>
         </form>
       </div>
@@ -177,7 +164,7 @@ function loadKhachHang() {
     const list = Array.isArray(data) ? data : [];
     renderTable(list);
   }).fail(err => {
-    $('#tbodyKhachHang').html('<tr><td colspan="7" class="text-danger text-center">Lỗi tải dữ liệu</td></tr>');
+    $('#tbodyKhachHang').html('<tr><td colspan="5" class="text-danger text-center">Lỗi tải dữ liệu</td></tr>');
     console.error(err.responseText);
   });
 }
@@ -185,18 +172,16 @@ function loadKhachHang() {
 function renderTable(list) {
   const tbody = $('#tbodyKhachHang').empty();
   if (list.length === 0) {
-    tbody.append('<tr><td colspan="7" class="text-center text-muted py-3">Chưa có khách hàng nào</td></tr>');
+    tbody.append('<tr><td colspan="5" class="text-center text-muted py-3">Chưa có khách hàng nào</td></tr>');
     return;
   }
   list.forEach(kh => {
     tbody.append(`
       <tr>
-        <td>${kh.HoTen}</td>
+        <td>${kh.TenKhachHang}</td>
+        <td>${kh.SoDienThoai}</td>
         <td>${kh.Email || '-'}</td>
-        <td>${kh.DienThoai}</td>
-        <td>${kh.GioiTinh || '-'}</td>
         <td>${kh.DiaChi || '-'}</td>
-        <td>${kh.NgayDangKy || '-'}</td>
         <td class="text-center">
           <button class="btn btn-sm btn-warning me-1" onclick="editKH(${kh.MaKH})"><i class="bi bi-pencil"></i></button>
           <button class="btn btn-sm btn-danger" onclick="deleteKH(${kh.MaKH})"><i class="bi bi-trash"></i></button>
@@ -208,10 +193,9 @@ function renderTable(list) {
 
 function saveKH() {
   const data = {
-    HoTen: $('#HoTen').val(),
+    TenKhachHang: $('#TenKhachHang').val(),
+    SoDienThoai: $('#SoDienThoai').val(),
     Email: $('#Email').val(),
-    DienThoai: $('#DienThoai').val(),
-    GioiTinh: $('#GioiTinh').val(),
     DiaChi: $('#DiaChi').val()
   };
   const id = $('#MaKH').val();
@@ -235,10 +219,9 @@ function saveKH() {
 function editKH(id) {
   $.get(API_KH + '?MaKH=' + id, function(kh) {
     $('#MaKH').val(kh.MaKH);
-    $('#HoTen').val(kh.HoTen);
+    $('#TenKhachHang').val(kh.TenKhachHang);
+    $('#SoDienThoai').val(kh.SoDienThoai);
     $('#Email').val(kh.Email);
-    $('#DienThoai').val(kh.DienThoai);
-    $('#GioiTinh').val(kh.GioiTinh);
     $('#DiaChi').val(kh.DiaChi);
     $('#modalTitle').text('Sửa Khách hàng');
     $('#modalKhachHang').modal('show');
