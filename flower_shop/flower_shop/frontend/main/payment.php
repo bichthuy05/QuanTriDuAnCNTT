@@ -1,0 +1,302 @@
+<?php
+// frontend/main/payment.php - Trang chọn hình thức thanh toán
+?>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chọn Hình Thức Thanh Toán - Flower'Lna</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #b08c3a;
+            --primary-light: #d4af37;
+            --primary-dark: #8a6e2f;
+            --accent: #f0e6d2;
+            --light: #faf9f7;
+            --dark: #2f2f2f;
+            --text: #3b2d1f;
+            --border: #e8dfca;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--text);
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        .payment-page-container {
+            background: var(--light);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        
+        .payment-method-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(176, 140, 58, 0.1);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+        
+        .payment-option {
+            border: 2px solid var(--border);
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin-bottom: 15px;
+            background: white;
+        }
+        
+        .payment-option:hover {
+            border-color: var(--primary);
+            background: rgba(176, 140, 58, 0.05);
+        }
+        
+        .payment-option.active {
+            border-color: var(--primary);
+            background: rgba(176, 140, 58, 0.08);
+        }
+        
+        .payment-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            width: 40px;
+            text-align: center;
+        }
+        
+        .payment-method-title {
+            font-weight: 600;
+            font-size: 17px;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .payment-method-desc {
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .summary-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(176, 140, 58, 0.1);
+            border: 1px solid var(--border);
+            position: sticky;
+            top: 100px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            transform: translateY(-2px);
+        }
+        
+        header {
+            background: white !important;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .text-primary {
+            color: var(--primary) !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="bg-white shadow-sm sticky-top">
+        <div class="container-fluid px-3">
+            <div class="d-flex align-items-center py-3">
+                <a href="checkout.php" class="btn p-2 me-3">
+                    <i class="fas fa-arrow-left" style="font-size: 18px; color: var(--primary);"></i>
+                </a>
+                <h5 class="mb-0 fw-bold text-primary">Chọn Hình Thức Thanh Toán</h5>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <div class="payment-page-container">
+        <div class="container-fluid px-3">
+            <div class="row g-4 justify-content-center">
+                <!-- PAYMENT METHODS -->
+                <div class="col-12 col-lg-8">
+                    <div class="payment-method-card">
+                        <h3 class="mb-4 fw-bold text-primary">Lựa Chọn Phương Thức Thanh Toán</h3>
+
+                        <div class="payment-options-container">
+                            <!-- COD -->
+                            <label class="payment-option active" onclick="selectPayment('cod')">
+                                <input type="radio" name="payment" value="cod" checked style="display:none;">
+                                <div class="d-flex align-items-start">
+                                    <div class="form-check mt-1 me-3">
+                                        <input type="radio" name="payment" value="cod" checked class="form-check-input">
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex align-items-center mb-1">
+                                            <span class="payment-icon">💵</span>
+                                            <h6 class="payment-method-title mb-0">Thanh Toán Khi Nhận Hàng (COD)</h6>
+                                        </div>
+                                        <p class="payment-method-desc">Thanh toán trực tiếp khi nhân viên giao hàng</p>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <!-- MOMO -->
+                            <label class="payment-option" onclick="selectPayment('momo')">
+                                <input type="radio" name="payment" value="momo" style="display:none;">
+                                <div class="d-flex align-items-start">
+                                    <div class="form-check mt-1 me-3">
+                                        <input type="radio" name="payment" value="momo" class="form-check-input">
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex align-items-center mb-1">
+                                            <span class="payment-icon">📱</span>
+                                            <h6 class="payment-method-title mb-0">Ví Momo</h6>
+                                        </div>
+                                        <p class="payment-method-desc">Thanh toán qua ứng dụng Momo</p>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <!-- BANK TRANSFER -->
+                            <label class="payment-option" onclick="selectPayment('transfer')">
+                                <input type="radio" name="payment" value="transfer" style="display:none;">
+                                <div class="d-flex align-items-start">
+                                    <div class="form-check mt-1 me-3">
+                                        <input type="radio" name="payment" value="transfer" class="form-check-input">
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex align-items-center mb-1">
+                                            <span class="payment-icon">🏦</span>
+                                            <h6 class="payment-method-title mb-0">Chuyển Khoản Ngân Hàng</h6>
+                                        </div>
+                                        <p class="payment-method-desc">Chuyển tiền trực tiếp vào tài khoản của shop</p>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ORDER SUMMARY -->
+                <div class="col-12 col-lg-4">
+                    <div class="summary-card">
+                        <h5 class="mb-4 fw-bold text-dark border-bottom pb-3">Tóm Tắt Đơn Hàng</h5>
+
+                        <div id="paymentSummary" class="mb-4 pb-3 border-bottom">
+                            <!-- Sản phẩm sẽ được load bằng JavaScript -->
+                        </div>
+
+                        <div class="mb-3 pb-3 border-bottom">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="small">Tạm tính:</span>
+                                <span class="small fw-semibold" id="paySubtotal">0 ₫</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="small">VAT (10%):</span>
+                                <span class="small fw-semibold" id="payVAT">0 ₫</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-4 fw-bold fs-5">
+                            <span>Tổng cộng:</span>
+                            <span class="text-primary" id="payTotal">0 ₫</span>
+                        </div>
+
+                        <button type="button" class="btn btn-primary w-100 py-3 fw-bold fs-6" onclick="submitPayment()">
+                            <i class="fas fa-check-circle me-2"></i> Xác Nhận Đặt Hàng
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+    $(document).ready(function() {
+        displayPaymentSummary();
+        selectPayment('cod');
+    });
+
+    function selectPayment(method) {
+        $('.payment-option').removeClass('active');
+        $('input[name="payment"][value="' + method + '"]').prop('checked', true);
+        $(`input[value="${method}"]`).closest('.payment-option').addClass('active');
+    }
+
+    function displayPaymentSummary() {
+        const cart = JSON.parse(localStorage.getItem('flower_cart') || '[]');
+        let html = '';
+        let total = 0;
+
+        if (cart.length === 0) {
+            html = '<div class="text-center text-muted py-3">Giỏ hàng trống</div>';
+        } else {
+            cart.forEach(item => {
+                const subtotal = item.gia * item.so_luong;
+                total += subtotal;
+                html += `
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-light rounded p-2 me-3">
+                                <i class="fas fa-flower text-primary"></i>
+                            </div>
+                            <div>
+                                <div class="small fw-semibold">${item.ten_hoa}</div>
+                                <div class="text-muted small">Số lượng: x${item.so_luong}</div>
+                            </div>
+                        </div>
+                        <span class="fw-semibold">${formatCurrency(subtotal)}</span>
+                    </div>
+                `;
+            });
+        }
+
+        $('#paymentSummary').html(html);
+        
+        const vat = Math.round(total * 0.1);
+        const totalWithVAT = total + vat;
+
+        $('#paySubtotal').text(formatCurrency(total));
+        $('#payVAT').text(formatCurrency(vat));
+        $('#payTotal').text(formatCurrency(totalWithVAT));
+    }
+
+    function formatCurrency(amount) {
+        return new Intl.NumberFormat('vi-VN').format(amount) + ' ₫';
+    }
+
+    function submitPayment() {
+        alert('Đặt hàng thành công!');
+        localStorage.removeItem('flower_cart');
+        localStorage.removeItem('checkout_form');
+        window.location.href = 'order_online.php';
+    }
+    </script>
+</body>
+</html>
