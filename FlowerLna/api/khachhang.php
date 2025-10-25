@@ -1,84 +1,74 @@
 <?php
-header("Content-Type: application/json; charset=UTF-8");
+header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+header("Access-Control-Allow-Headers: Content-Type");
 
-require_once("../connect.php"); // đường dẫn tới file connect.php
+include '../connect.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
-    case 'GET':
-        // Lấy danh sách hoặc 1 khách hàng
-        if (isset($_GET['MaKhachHang'])) {
-            $id = intval($_GET['MaKhachHang']);
-            $stmt = $conn->prepare("SELECT * FROM khachhang WHERE MaKhachHang = ?");
-            $stmt->execute([$id]);
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
-            echo json_encode($data ?: ["message" => "Không tìm thấy khách hàng."]);
-        } else {
-            $stmt = $conn->query("SELECT * FROM khachhang ORDER BY MaKhachHang DESC");
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            echo json_encode($data);
-        }
-        break;
+  case 'GET':
+    if (isset($_GET['MaKH'])) {
+      $id = intval($_GET['MaKH']);
+      $sql = "SELECT * FROM khachhang WHERE MaKhachHang = $id";
+      $result = $conn->query($sql);
+      if ($row = $result->fetch_assoc()) echo json_encode($row);
+      else echo json_encode(["message" => "Không tìm thấy khách hàng"]);
+    } else {
+      $sql = "SELECT * FROM khachhang ORDER BY MaKhachHang DESC";
+      $result = $conn->query($sql);
+      $data = [];
+      while ($row = $result->fetch_assoc()) $data[] = $row;
+      echo json_encode($data);
+    }
+    break;
 
-    case 'POST':
-        // Thêm khách hàng mới
-        $input = json_decode(file_get_contents("php://input"), true);
-        if (!isset($input['TenKhachHang']) || empty(trim($input['TenKhachHang']))) {
-            echo json_encode(["error" => "Tên khách hàng không được để trống."]);
-            exit();
-        }
+  case 'POST':
+    $input = json_decode(file_get_contents("php://input"), true);
+    $TenKhachHang = $conn->real_escape_string($input['TenKhachHang']);
+    $SoDienThoai = $conn->real_escape_string($input['SoDienThoai']);
+    $Email = $conn->real_escape_string($input['Email']);
+    $DiaChi = $conn->real_escape_string($input['DiaChi']);
 
-        $stmt = $conn->prepare("INSERT INTO khachhang (TenKhachHang, SoDienThoai, Email, DiaChi) VALUES (?, ?, ?, ?)");
-        $ok = $stmt->execute([
-            $input['TenKhachHang'],
-            $input['SoDienThoai'] ?? null,
-            $input['Email'] ?? null,
-            $input['DiaChi'] ?? null
-        ]);
+    $sql = "INSERT INTO khachhang (TenKhachHang, SoDienThoai, Email, DiaChi)
+            VALUES ('$TenKhachHang', '$SoDienThoai', '$Email', '$DiaChi')";
+    if ($conn->query($sql))
+      echo json_encode(["message" => "Thêm khách hàng thành công"]);
+    else
+      echo json_encode(["message" => "Lỗi: " . $conn->error]);
+    break;
 
-        echo json_encode($ok ? ["success" => "Thêm khách hàng thành công!"] : ["error" => "Không thể thêm khách hàng."]);
-        break;
+  case 'PUT':
+    $input = json_decode(file_get_contents("php://input"), true);
+    $MaKH = intval($input['MaKH']);
+    $TenKhachHang = $conn->real_escape_string($input['TenKhachHang']);
+    $SoDienThoai = $conn->real_escape_string($input['SoDienThoai']);
+    $Email = $conn->real_escape_string($input['Email']);
+    $DiaChi = $conn->real_escape_string($input['DiaChi']);
 
-    case 'PUT':
-        // Cập nhật khách hàng
-        $input = json_decode(file_get_contents("php://input"), true);
-        if (!isset($input['MaKhachHang'])) {
-            echo json_encode(["error" => "Thiếu mã khách hàng."]);
-            exit();
-        }
+    $sql = "UPDATE khachhang 
+            SET TenKhachHang='$TenKhachHang', SoDienThoai='$SoDienThoai', 
+                Email='$Email', DiaChi='$DiaChi' 
+            WHERE MaKhachHang=$MaKH";
+    if ($conn->query($sql))
+      echo json_encode(["message" => "Cập nhật thành công"]);
+    else
+      echo json_encode(["message" => "Lỗi: " . $conn->error]);
+    break;
 
-        $stmt = $conn->prepare("UPDATE khachhang SET TenKhachHang=?, SoDienThoai=?, Email=?, DiaChi=? WHERE MaKhachHang=?");
-        $ok = $stmt->execute([
-            $input['TenKhachHang'],
-            $input['SoDienThoai'],
-            $input['Email'],
-            $input['DiaChi'],
-            $input['MaKhachHang']
-        ]);
+  case 'DELETE':
+    $id = intval($_GET['MaKH']);
+    $sql = "DELETE FROM khachhang WHERE MaKhachHang=$id";
+    if ($conn->query($sql))
+      echo json_encode(["message" => "Xóa thành công"]);
+    else
+      echo json_encode(["message" => "Lỗi: " . $conn->error]);
+    break;
 
-        echo json_encode($ok ? ["success" => "Cập nhật thành công!"] : ["error" => "Không thể cập nhật."]);
-        break;
-
-    case 'DELETE':
-        // Xóa khách hàng
-        parse_str(file_get_contents("php://input"), $_DELETE);
-        if (!isset($_DELETE['MaKhachHang'])) {
-            echo json_encode(["error" => "Thiếu mã khách hàng để xóa."]);
-            exit();
-        }
-
-        $stmt = $conn->prepare("DELETE FROM khachhang WHERE MaKhachHang=?");
-        $ok = $stmt->execute([$_DELETE['MaKhachHang']]);
-
-        echo json_encode($ok ? ["success" => "Đã xóa khách hàng."] : ["error" => "Không thể xóa khách hàng."]);
-        break;
-
-    default:
-        echo json_encode(["error" => "Phương thức không được hỗ trợ."]);
-        break;
+  default:
+    echo json_encode(["message" => "Phương thức không hợp lệ"]);
 }
+$conn->close();
 ?>

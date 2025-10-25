@@ -1,104 +1,109 @@
 <?php
-// api/donhang.php
-include_once '../connect.php';
+header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+
+include '../connect.php'; // Kết nối DB
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-switch($method) {
+switch ($method) {
+    // =====================================================
+    // 🟢 LẤY DANH SÁCH HOẶC 1 ĐƠN HÀNG
+    // =====================================================
     case 'GET':
-        if(isset($_GET['MaDonHang'])) {
-            // Lấy chi tiết 1 đơn hàng
-            $id = $_GET['MaDonHang'];
-            $stmt = $conn->prepare("
-                SELECT d.*, k.TenKhachHang, k.SoDienThoai, k.Email 
-                FROM donhang d 
-                JOIN khachhang k ON d.MaKhachHang = k.MaKhachHang 
-                WHERE d.MaDonHang = ?
-            ");
-            $stmt->execute([$id]);
-            $donhang = $stmt->fetch(PDO::FETCH_ASSOC);
-            echo json_encode($donhang);
+        if (isset($_GET['MaDonHang'])) {
+            $id = intval($_GET['MaDonHang']);
+            $sql = "SELECT d.*, k.TenKhachHang 
+                    FROM donhang d 
+                    JOIN khachhang k ON d.MaKhachHang = k.MaKhachHang
+                    WHERE d.MaDonHang = $id";
+            $result = $conn->query($sql);
+            if ($row = $result->fetch_assoc()) {
+                echo json_encode($row);
+            } else {
+                echo json_encode(["message" => "Không tìm thấy đơn hàng"]);
+            }
         } else {
-            // Lấy danh sách đơn hàng
-            $stmt = $conn->prepare("
-                SELECT d.*, k.TenKhachHang, k.SoDienThoai 
-                FROM donhang d 
-                JOIN khachhang k ON d.MaKhachHang = k.MaKhachHang 
-                ORDER BY d.NgayDat DESC
-            ");
-            $stmt->execute();
-            $donhang_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            echo json_encode($donhang_list);
+            $sql = "SELECT d.*, k.TenKhachHang 
+                    FROM donhang d 
+                    JOIN khachhang k ON d.MaKhachHang = k.MaKhachHang
+                    ORDER BY d.MaDonHang DESC";
+            $result = $conn->query($sql);
+            $data = [];
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            echo json_encode($data);
         }
         break;
-        
+
+    // =====================================================
+    // 🟡 THÊM ĐƠN HÀNG MỚI
+    // =====================================================
     case 'POST':
-        // Thêm đơn hàng mới
-        $data = json_decode(file_get_contents("php://input"), true);
-        $MaKhachHang = $data['MaKhachHang'];
-        $NgayDat = $data['NgayDat'] ?? date('Y-m-d');
-        $NgayGiao = $data['NgayGiao'] ?? null;
-        $TongTien = $data['TongTien'];
-        $TrangThai = $data['TrangThai'] ?? 'Chờ xác nhận';
-        
-        $stmt = $conn->prepare("INSERT INTO donhang (MaKhachHang, NgayDat, NgayGiao, TongTien, TrangThai) VALUES (?, ?, ?, ?, ?)");
-        if($stmt->execute([$MaKhachHang, $NgayDat, $NgayGiao, $TongTien, $TrangThai])) {
-            echo json_encode([
-                "success" => true, 
-                "message" => "Thêm đơn hàng thành công", 
-                "MaDonHang" => $conn->lastInsertId()
-            ]);
+        $input = json_decode(file_get_contents("php://input"), true);
+
+        $MaKhachHang = intval($input['MaKhachHang']);
+        $NgayDat = $conn->real_escape_string($input['NgayDat']);
+        $NgayGiao = $conn->real_escape_string($input['NgayGiao']);
+        $TongTien = floatval($input['TongTien']);
+        $TrangThai = $conn->real_escape_string($input['TrangThai']);
+
+        $sql = "INSERT INTO donhang (MaKhachHang, NgayDat, NgayGiao, TongTien, TrangThai)
+                VALUES ($MaKhachHang, '$NgayDat', '$NgayGiao', $TongTien, '$TrangThai')";
+        if ($conn->query($sql)) {
+            echo json_encode(["message" => "Thêm đơn hàng thành công"]);
         } else {
-            echo json_encode(["success" => false, "message" => "Thêm đơn hàng thất bại"]);
+            echo json_encode(["message" => "Lỗi thêm đơn hàng: " . $conn->error]);
         }
         break;
-        
+
+    // =====================================================
+    // 🟠 CẬP NHẬT ĐƠN HÀNG
+    // =====================================================
     case 'PUT':
-        // Cập nhật đơn hàng
-        $data = json_decode(file_get_contents("php://input"), true);
-        $MaDonHang = $data['MaDonHang'];
-        
-        if(isset($data['TrangThai'])) {
-            // Cập nhật trạng thái
-            $TrangThai = $data['TrangThai'];
-            $stmt = $conn->prepare("UPDATE donhang SET TrangThai = ? WHERE MaDonHang = ?");
-            if($stmt->execute([$TrangThai, $MaDonHang])) {
-                echo json_encode(["success" => true, "message" => "Cập nhật trạng thái thành công"]);
-            } else {
-                echo json_encode(["success" => false, "message" => "Cập nhật trạng thái thất bại"]);
-            }
+        $input = json_decode(file_get_contents("php://input"), true);
+
+        $MaDonHang = intval($input['MaDonHang']);
+        $MaKhachHang = intval($input['MaKhachHang']);
+        $NgayDat = $conn->real_escape_string($input['NgayDat']);
+        $NgayGiao = $conn->real_escape_string($input['NgayGiao']);
+        $TongTien = floatval($input['TongTien']);
+        $TrangThai = $conn->real_escape_string($input['TrangThai']);
+
+        $sql = "UPDATE donhang 
+                SET MaKhachHang=$MaKhachHang, NgayDat='$NgayDat', NgayGiao='$NgayGiao',
+                    TongTien=$TongTien, TrangThai='$TrangThai'
+                WHERE MaDonHang=$MaDonHang";
+        if ($conn->query($sql)) {
+            echo json_encode(["message" => "Cập nhật đơn hàng thành công"]);
         } else {
-            // Cập nhật thông tin đơn hàng
-            $MaKhachHang = $data['MaKhachHang'];
-            $NgayDat = $data['NgayDat'];
-            $NgayGiao = $data['NgayGiao'];
-            $TongTien = $data['TongTien'];
-            
-            $stmt = $conn->prepare("UPDATE donhang SET MaKhachHang=?, NgayDat=?, NgayGiao=?, TongTien=? WHERE MaDonHang=?");
-            if($stmt->execute([$MaKhachHang, $NgayDat, $NgayGiao, $TongTien, $MaDonHang])) {
-                echo json_encode(["success" => true, "message" => "Cập nhật đơn hàng thành công"]);
-            } else {
-                echo json_encode(["success" => false, "message" => "Cập nhật đơn hàng thất bại"]);
-            }
+            echo json_encode(["message" => "Lỗi cập nhật: " . $conn->error]);
         }
         break;
-        
+
+    // =====================================================
+    // 🔴 XÓA ĐƠN HÀNG
+    // =====================================================
     case 'DELETE':
-        // Xóa đơn hàng
-        $data = json_decode(file_get_contents("php://input"), true);
-        $MaDonHang = $data['MaDonHang'];
-        
-        // Xóa chi tiết đơn hàng trước
-        $stmt_detail = $conn->prepare("DELETE FROM chitietdonhang WHERE MaDonHang = ?");
-        $stmt_detail->execute([$MaDonHang]);
-        
-        // Xóa đơn hàng
-        $stmt = $conn->prepare("DELETE FROM donhang WHERE MaDonHang = ?");
-        if($stmt->execute([$MaDonHang])) {
-            echo json_encode(["success" => true, "message" => "Xóa đơn hàng thành công"]);
+        if (isset($_GET['MaDonHang'])) {
+            $id = intval($_GET['MaDonHang']);
+            $sql = "DELETE FROM donhang WHERE MaDonHang=$id";
+            if ($conn->query($sql)) {
+                echo json_encode(["message" => "Xóa đơn hàng thành công"]);
+            } else {
+                echo json_encode(["message" => "Lỗi xóa: " . $conn->error]);
+            }
         } else {
-            echo json_encode(["success" => false, "message" => "Xóa đơn hàng thất bại"]);
+            echo json_encode(["message" => "Thiếu mã đơn hàng để xóa"]);
         }
         break;
+
+    default:
+        echo json_encode(["message" => "Phương thức không hợp lệ"]);
 }
+
+$conn->close();
 ?>
