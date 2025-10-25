@@ -11,7 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 
     <style>
-        /* COPY TOÀN BỘ CSS TỪ quanly.html */
         body {
             background-color: #faf9f7;
             font-family: 'Roboto', sans-serif;
@@ -184,6 +183,23 @@
             object-fit: cover;
             border-radius: 8px;
         }
+
+        .user-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .user-welcome {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #2f2f2f;
+        }
     </style>
 </head>
 <body>
@@ -242,8 +258,8 @@
                     <a class="nav-link" href="#">
                         <i class="bi bi-box-seam"></i>Đơn hàng
                     </a>
-                    <div class="user-info mt-4 p-3 bg-light rounded">
-                        <div class="user-welcome text-muted">Xin chào</div>
+                    <div class="user-info mt-4">
+                        <div class="user-welcome">Xin chào</div>
                         <div class="user-name fw-bold" id="adminName">Admin</div>
                     </div>
                     <button class="btn btn-outline-secondary mt-3 w-100" onclick="dangXuat()">
@@ -335,7 +351,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Thêm Hoa Mới</h5>
+                    <h5 class="modal-title" id="modalHoaTitle">Thêm Hoa Mới</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -351,6 +367,10 @@
                                     <label class="form-label">Giá (VNĐ)</label>
                                     <input type="number" class="form-control" id="Gia" required>
                                 </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Số lượng</label>
+                                    <input type="number" class="form-control" id="SoLuongTon" value="0">
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -360,8 +380,15 @@
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Số lượng</label>
-                                    <input type="number" class="form-control" id="SoLuongTon" value="0">
+                                    <label class="form-label">Hình ảnh</label>
+                                    <input type="text" class="form-control" id="HinhAnh" placeholder="Tên file ảnh">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Trạng thái</label>
+                                    <select class="form-select" id="TrangThai">
+                                        <option value="Còn hàng">Còn hàng</option>
+                                        <option value="Hết hàng">Hết hàng</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -431,29 +458,73 @@
             }
         }
 
-        // Load danh sách hoa
+        // Sửa đường dẫn API - QUAN TRỌNG!
+        const API_BASE_URL = '../api'; // Điều chỉnh theo cấu hình server của bạn
+
+        // Load danh sách hoa - PHIÊN BẢN ĐÃ SỬA
         function loadHoa() {
-            $.get('api/hoa.php', function(data) {
-                console.log('✅ Dữ liệu hoa:', data);
-                renderHoaTable(Array.isArray(data) ? data : [data]);
-            }).fail(function(xhr) {
-                console.error('❌ Lỗi tải hoa:', xhr.responseText);
-                $('#tbodyHoa').html('<tr><td colspan="7" class="text-center text-danger">Lỗi tải dữ liệu</td></tr>');
+            console.log('🔄 Đang tải danh sách hoa từ:', API_BASE_URL + '/hoa.php');
+            
+            $.ajax({
+                url: API_BASE_URL + '/hoa.php',
+                type: 'GET',
+                success: function(data) {
+                    console.log('✅ Dữ liệu hoa nhận được:', data);
+                    
+                    if (!data) {
+                        console.warn('⚠️ Không có dữ liệu trả về');
+                        $('#tbodyHoa').html('<tr><td colspan="7" class="text-center text-muted">Không có dữ liệu</td></tr>');
+                        return;
+                    }
+                    
+                    const hoaList = Array.isArray(data) ? data : [data];
+                    console.log('📊 Số lượng hoa:', hoaList.length);
+                    renderHoaTable(hoaList);
+                },
+                error: function(xhr, status, error) {
+                    console.error('❌ Lỗi tải hoa:', {
+                        status: status,
+                        error: error,
+                        responseText: xhr.responseText
+                    });
+                    
+                    $('#tbodyHoa').html(`
+                        <tr>
+                            <td colspan="7" class="text-center text-danger py-4">
+                                <i class="bi bi-exclamation-triangle me-2"></i>
+                                Lỗi tải dữ liệu: ${error}
+                                <br><small class="text-muted">${xhr.responseText || 'Không có phản hồi'}</small>
+                                <br><button class="btn btn-sm btn-primary mt-2" onclick="loadHoa()">Thử lại</button>
+                            </td>
+                        </tr>
+                    `);
+                }
             });
         }
 
         // Load danh sách loại hoa cho dropdown
         function loadLoaiHoaForSelect() {
-            $.get('api/loaihoa.php', function(data) {
-                const loaiHoaList = Array.isArray(data) ? data : [data];
-                const select = $('#MaLoai');
-                select.empty().append('<option value="">Chọn loại hoa</option>');
-                
-                loaiHoaList.forEach(loai => {
-                    select.append(`<option value="${loai.MaLoai}">${loai.TenLoai}</option>`);
-                });
-            }).fail(function(xhr) {
-                console.error('❌ Lỗi tải loại hoa:', xhr.responseText);
+            console.log('🔄 Đang tải loại hoa cho select...');
+            
+            $.ajax({
+                url: API_BASE_URL + '/loaihoa.php',
+                type: 'GET',
+                success: function(data) {
+                    console.log('✅ Dữ liệu loại hoa:', data);
+                    const loaiHoaList = Array.isArray(data) ? data : [data];
+                    const select = $('#MaLoai');
+                    select.empty().append('<option value="">Chọn loại hoa</option>');
+                    
+                    loaiHoaList.forEach(loai => {
+                        select.append(`<option value="${loai.MaLoai}">${loai.TenLoai}</option>`);
+                    });
+                    
+                    console.log('✅ Đã tải xong', loaiHoaList.length, 'loại hoa');
+                },
+                error: function(xhr) {
+                    console.error('❌ Lỗi tải loại hoa:', xhr.responseText);
+                    alert('Lỗi tải danh sách loại hoa');
+                }
             });
         }
 
@@ -462,7 +533,17 @@
             tbody.empty();
 
             if (hoaList.length === 0) {
-                tbody.append('<tr><td colspan="7" class="text-center py-4">Không có dữ liệu</td></tr>');
+                tbody.append(`
+                    <tr>
+                        <td colspan="7" class="text-center py-4">
+                            <i class="bi bi-inbox fa-2x text-muted mb-3"></i>
+                            <p class="text-muted">Không có dữ liệu hoa</p>
+                            <button class="btn btn-primary-custom mt-2" data-bs-toggle="modal" data-bs-target="#modalHoa">
+                                <i class="bi bi-plus-circle me-2"></i>Thêm hoa đầu tiên
+                            </button>
+                        </td>
+                    </tr>
+                `);
                 return;
             }
 
@@ -470,27 +551,34 @@
                 const tr = `
                     <tr>
                         <td>
-                            <div class="product-img bg-light d-flex align-items-center justify-content-center">
-                                <i class="bi bi-flower1 text-muted"></i>
-                            </div>
+                            ${hoa.HinhAnh ? 
+                                `<img src="../assets/img/${hoa.HinhAnh}" class="product-img" alt="${hoa.TenHoa}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjRjhGOEY4Ii8+CjxwYXRoIGQ9Ik0zMCAzN0MzMy44NjYgMzcgMzcgMzMuODY2IDM3IDMwQzM3IDI2LjEzNCAzMy44NjYgMjMgMzAgMjNDMjYuMTM0IDIzIDIzIDI2LjEzNCAyMyAzMEMyMyAzMy44NjYgMjYuMTM0IDM3IDMwIDM3Wk0zMCA0MEMzNS41MjIgNDAgNDAgMzUuNTIyIDQwIDMwQzQwIDI0LjQ3OCAzNS41MjIgMjAgMzAgMjBDMjQuNDc4IDIwIDIwIDI0LjQ3OCAyMCAzMEMyMCAzNS41MjIgMjQuNDc4IDQwIDMwIDQwWk0xMCA1MEg1MEM1MS4xMDQgNTAgNTIgNDkuMTA0IDUyIDQ4VjEyQzUyIDEwLjg5NiA1MS4xMDQgMTAgNTAgMTBIMTBDOC44OTYgMTAgOCAxMC44OTYgOCAxMlY0OEM4IDQ5LjEwNCA4Ljg5NiA1MCAxMCA1MFoiIGZpbGw9IiNDQ0NDQ0MiLz4KPC9zdmc+'">` : 
+                                `<div class="product-img bg-light d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-flower1 text-muted"></i>
+                                </div>`
+                            }
                         </td>
                         <td>
-                            <strong>${hoa.TenHoa}</strong>
-                            ${hoa.MoTa ? `<br><small class="text-muted">${hoa.MoTa}</small>` : ''}
+                            <strong>${escapeHtml(hoa.TenHoa)}</strong>
+                            ${hoa.MoTa ? `<br><small class="text-muted">${escapeHtml(hoa.MoTa)}</small>` : ''}
                         </td>
                         <td>${formatCurrency(hoa.Gia)}</td>
-                        <td>${hoa.SoLuongTon}</td>
+                        <td>
+                            <span class="badge ${hoa.SoLuongTon > 0 ? 'bg-info' : 'bg-warning'}">
+                                ${hoa.SoLuongTon || 0}
+                            </span>
+                        </td>
                         <td>${hoa.TenLoai || 'N/A'}</td>
                         <td>
                             <span class="badge ${hoa.TrangThai === 'Còn hàng' ? 'bg-success' : 'bg-danger'}">
-                                ${hoa.TrangThai}
+                                ${hoa.TrangThai || 'Còn hàng'}
                             </span>
                         </td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-warning me-1" onclick="editHoa(${hoa.MaHoa})">
+                            <button class="btn btn-sm btn-warning me-1" onclick="editHoa(${hoa.MaHoa})" title="Sửa">
                                 <i class="bi bi-pencil"></i>
                             </button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteHoa(${hoa.MaHoa})">
+                            <button class="btn btn-sm btn-danger" onclick="deleteHoa(${hoa.MaHoa})" title="Xóa">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </td>
@@ -498,13 +586,131 @@
                 `;
                 tbody.append(tr);
             });
+            
+            console.log('✅ Đã render', hoaList.length, 'sản phẩm');
+        }
+
+        // Hàm thêm hoa
+        function saveHoa() {
+            const tenHoa = $('#TenHoa').val().trim();
+            const gia = $('#Gia').val();
+            const maLoai = $('#MaLoai').val();
+            
+            if (!tenHoa || !gia || !maLoai) {
+                alert('Vui lòng điền đầy đủ thông tin bắt buộc');
+                return;
+            }
+
+            const formData = {
+                TenHoa: tenHoa,
+                Gia: parseInt(gia),
+                SoLuongTon: parseInt($('#SoLuongTon').val()) || 0,
+                MoTa: $('#MoTa').val().trim(),
+                HinhAnh: $('#HinhAnh').val().trim(),
+                MaLoai: parseInt(maLoai),
+                TrangThai: $('#TrangThai').val()
+            };
+
+            const maHoa = $('#MaHoa').val();
+            const method = maHoa ? 'PUT' : 'POST';
+            if (maHoa) formData.MaHoa = parseInt(maHoa);
+
+            $('#btnSaveHoa').prop('disabled', true).html('<i class="bi bi-spinner spinner-border-sm"></i> Đang lưu...');
+
+            $.ajax({
+                url: API_BASE_URL + '/hoa.php',
+                type: method,
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    $('#modalHoa').modal('hide');
+                    loadHoa();
+                    alert(method === 'POST' ? 'Thêm hoa thành công!' : 'Cập nhật hoa thành công!');
+                },
+                error: function(xhr) {
+                    let errorMsg = 'Lỗi không xác định';
+                    try {
+                        const errorResponse = JSON.parse(xhr.responseText);
+                        errorMsg = errorResponse.error || errorResponse.message || xhr.responseText;
+                    } catch (e) {
+                        errorMsg = xhr.responseText || 'Lỗi kết nối';
+                    }
+                    alert('Lỗi: ' + errorMsg);
+                },
+                complete: function() {
+                    $('#btnSaveHoa').prop('disabled', false).html('Lưu');
+                }
+            });
+        }
+
+        // Sửa hoa
+        function editHoa(maHoa) {
+            $.ajax({
+                url: API_BASE_URL + '/hoa.php?MaHoa=' + maHoa,
+                type: 'GET',
+                success: function(hoa) {
+                    $('#MaHoa').val(hoa.MaHoa);
+                    $('#TenHoa').val(hoa.TenHoa);
+                    $('#Gia').val(hoa.Gia);
+                    $('#SoLuongTon').val(hoa.SoLuongTon);
+                    $('#MoTa').val(hoa.MoTa);
+                    $('#HinhAnh').val(hoa.HinhAnh);
+                    $('#MaLoai').val(hoa.MaLoai);
+                    $('#TrangThai').val(hoa.TrangThai);
+                    $('#modalHoaTitle').text('Sửa Thông Tin Hoa');
+                    $('#modalHoa').modal('show');
+                },
+                error: function(xhr) {
+                    alert('Lỗi tải thông tin hoa');
+                }
+            });
+        }
+
+        // Xóa hoa
+        function deleteHoa(maHoa) {
+            if (!confirm('Bạn có chắc chắn muốn xóa hoa này?')) return;
+
+            $.ajax({
+                url: API_BASE_URL + '/hoa.php?MaHoa=' + maHoa,
+                type: 'DELETE',
+                success: function(response) {
+                    alert('Xóa hoa thành công!');
+                    loadHoa();
+                },
+                error: function(xhr) {
+                    let errorMsg = 'Lỗi không xác định';
+                    try {
+                        const errorResponse = JSON.parse(xhr.responseText);
+                        errorMsg = errorResponse.error || errorResponse.message || xhr.responseText;
+                    } catch (e) {
+                        errorMsg = xhr.responseText || 'Lỗi kết nối';
+                    }
+                    alert('Lỗi: ' + errorMsg);
+                }
+            });
+        }
+
+        // Tìm kiếm
+        $('#searchHoa').on('input', function() {
+            const keyword = $(this).val().toLowerCase();
+            $('#tbodyHoa tr').each(function() {
+                const text = $(this).text().toLowerCase();
+                $(this).toggle(text.includes(keyword));
+            });
+        });
+
+        // Hàm utility
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         function formatCurrency(amount) {
             return new Intl.NumberFormat('vi-VN', {
                 style: 'currency',
                 currency: 'VND'
-            }).format(amount);
+            }).format(amount || 0);
         }
 
         function dangXuat() {
@@ -512,12 +718,44 @@
             window.location.href = 'login.html';
         }
 
+        // TEST: Kiểm tra kết nối API ngay khi trang load
+        function testAPIConnection() {
+            console.log('🧪 Testing API connection...');
+            $.get(API_BASE_URL + '/hoa.php')
+                .done(function(data) {
+                    console.log('✅ API Connection SUCCESS:', data);
+                })
+                .fail(function(xhr) {
+                    console.error('❌ API Connection FAILED:', xhr.status, xhr.statusText);
+                    console.log('💡 Gợi ý: Kiểm tra đường dẫn API_BASE_URL: ' + API_BASE_URL);
+                });
+        }
+
         $(document).ready(function() {
+            console.log('🚀 Trang hoa.html đã sẵn sàng');
+            
             if (!kiemTraDangNhap()) {
                 return;
             }
+            
+            // Test connection trước
+            testAPIConnection();
+            
+            // Load dữ liệu
             loadHoa();
             loadLoaiHoaForSelect();
+            
+            // Gắn sự kiện
+            $('#btnSaveHoa').click(saveHoa);
+            
+            // Reset form khi modal đóng
+            $('#modalHoa').on('hidden.bs.modal', function() {
+                $('#formHoa')[0].reset();
+                $('#MaHoa').val('');
+                $('#modalHoaTitle').text('Thêm Hoa Mới');
+            });
+            
+            console.log('✅ Đã khởi tạo xong trang quản lý hoa');
         });
     </script>
 </body>
