@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Loại Hoa - Flower'Lna</title>
+    
+    <!-- Bootstrap CSS + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* COPY TOÀN BỘ CSS TỪ quanly.html */
+        body {
+            background-color: #faf9f7;
+            font-family: 'Roboto', sans-serif;
+            color: #2f2f2f;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: #b08c3a;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .contact-info {
+            text-align: right;
+            color: #7c7c7c;
+            font-size: 14px;
+        }
+
+        .navbar {
+            background-color: #fff8f0 !important;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .navbar-nav .nav-link {
+            color: #3b2d1f !important;
+            font-weight: 500;
+            font-size: 16px;
+            margin: 0 10px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #b08c3a !important;
+        }
+
+        .sidebar {
+            background: #fff;
+            border-right: 1px solid #eee;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+            min-height: calc(100vh - 140px);
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            background: linear-gradient(135deg, #fff8f0 0%, #fff 100%);
+        }
+
+        .sidebar .nav-link {
+            color: #3b2d1f;
+            padding: 15px 20px;
+            margin: 5px 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: #fff8f0;
+            color: #b08c3a;
+            transform: translateX(5px);
+        }
+
+        .sidebar .nav-link.active {
+            background: linear-gradient(135deg, #b08c3a 0%, #d4af37 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(176, 140, 58, 0.3);
+        }
+
+        .sidebar .nav-link i {
+            width: 20px;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        .main-content {
+            background: #faf9f7;
+            min-height: calc(100vh - 140px);
+            padding: 30px;
+        }
+
+        .page-header {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eee;
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            color: #b08c3a;
+            margin-bottom: 5px;
+        }
+
+        .page-subtitle {
+            color: #7c7c7c;
+            font-size: 16px;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #b08c3a 0%, #d4af37 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 25px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(176, 140, 58, 0.4);
+            color: white;
+        }
+
+        footer {
+            background: #1e1a16;
+            color: #d4c7a0;
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 50px;
+        }
+
+        footer h5 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        /* Table styles */
+        .table-modern {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .table-modern thead {
+            background: linear-gradient(135deg, #b08c3a 0%, #d4af37 100%);
+            color: white;
+        }
+
+        .table-modern th {
+            border: none;
+            padding: 15px;
+            font-weight: 600;
+        }
+
+        .table-modern td {
+            padding: 15px;
+            vertical-align: middle;
+        }
+
+        .badge-loaihoa {
+            background: linear-gradient(135deg, #b08c3a 0%, #d4af37 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+            border-left: 4px solid #b08c3a;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .stats-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2f2f2f;
+            margin-bottom: 5px;
+        }
+
+        .stats-label {
+            color: #7c7c7c;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stats-icon {
+            font-size: 40px;
+            color: #b08c3a;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="container-fluid">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="index.html" class="logo text-decoration-none">🌸 Flower'Lna</a>
+            <div class="contact-info">
+                Hotline: <strong>1800 88 88 88</strong><br>
+                Flower'Lna.vn | contact@FlowerLna.vn
+            </div>
+        </div>
+    </header>
+
+    <!-- MENU -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Bộ sưu tập</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Dịch vụ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Khuyến mãi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Liên hệ</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- SIDEBAR -->
+            <div class="col-md-3 col-lg-2 sidebar">
+                <div class="sidebar-header">
+                    <h5 class="mb-0">🌸 Flower'Lna</h5>
+                    <small class="text-muted">Admin Panel</small>
+                </div>
+                <nav class="nav flex-column mt-4">
+                    <a class="nav-link" href="quanly.html">
+                        <i class="bi bi-speedometer2"></i>Dashboard
+                    </a>
+                    <a class="nav-link" href="hoa.html">
+                        <i class="bi bi-flower1"></i>Quản lý Hoa
+                    </a>
+                    <a class="nav-link active" href="loaihoa.html">
+                        <i class="bi bi-tags"></i>Loại Hoa
+                    </a>
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-people"></i>Khách hàng
+                    </a>
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-box-seam"></i>Đơn hàng
+                    </a>
+                    <div class="user-info mt-4 p-3 bg-light rounded">
+                        <div class="user-welcome text-muted">Xin chào</div>
+                        <div class="user-name fw-bold" id="adminName">Admin</div>
+                    </div>
+                    <button class="btn btn-outline-secondary mt-3 w-100" onclick="dangXuat()">
+                        <i class="bi bi-box-arrow-right me-2"></i>Đăng xuất
+                    </button>
+                </nav>
+            </div>
+
+            <!-- MAIN CONTENT AREA -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h1 class="page-title">Quản lý Loại Hoa</h1>
+                            <p class="page-subtitle">Quản lý danh mục các loại hoa trong cửa hàng</p>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#modalLoaiHoa">
+                                <i class="bi bi-plus-circle me-2"></i>Thêm Loại Hoa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Card -->
+                <div class="row mb-4">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stats-card">
+                            <div class="stats-icon">
+                                <i class="bi bi-tags"></i>
+                            </div>
+                            <div class="stats-number" id="totalLoaiHoa">0</div>
+                            <div class="stats-label">Tổng loại hoa</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Tìm kiếm loại hoa..." id="searchLoaiHoa">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loai Hoa Table -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-modern">
+                                <thead>
+                                    <tr>
+                                        <th width="100">Mã</th>
+                                        <th>Tên Loại Hoa</th>
+                                        <th>Mô tả</th>
+                                        <th width="150">Ngày tạo</th>
+                                        <th width="120" class="text-center">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyLoaiHoa">
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <p class="mt-2 text-muted">Đang tải dữ liệu...</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <h5>Flower'Lna - Hoa Thượng Lưu</h5>
+            <p>Địa chỉ: 88 Nguyễn Huệ, Quận 1, TP.HCM<br>
+            Hotline: 1800 88 88 88 | Email: contact@FlowerLna.vn</p>
+            <div>
+                <a href="#"><i class="bi bi-facebook"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
+                <a href="#"><i class="bi bi-twitter"></i></a>
+            </div>
+            <p class="mt-3">&copy; 2025 Flower'Lna. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Modal Thêm/Sửa Loại Hoa -->
+    <div class="modal fade" id="modalLoaiHoa" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLoaiHoaTitle">Thêm Loại Hoa Mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formLoaiHoa">
+                        <input type="hidden" id="MaLoai">
+                        <div class="mb-3">
+                            <label class="form-label">Tên Loại Hoa</label>
+                            <input type="text" class="form-control" id="TenLoai" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mô tả</label>
+                            <textarea class="form-control" id="MoTa" rows="4" placeholder="Mô tả về loại hoa..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary-custom" id="btnSaveLoaiHoa">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS + jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Kiểm tra đăng nhập
+        function kiemTraDangNhap() {
+            const nguoiDung = localStorage.getItem('nguoiDung');
+            const daDangNhap = localStorage.getItem('daDangNhap');
+            
+            if (!daDangNhap || !nguoiDung) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const user = JSON.parse(nguoiDung);
+                if (user.VaiTro !== 'quantri') {
+                    alert('Bạn không có quyền truy cập!');
+                    window.location.href = 'index.html';
+                    return;
+                }
+                $('#adminName').text(user.HoTen);
+            } catch (e) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Load danh sách loại hoa
+        function loadLoaiHoa() {
+            $.get('../api/loaihoa.php', function(data) {
+                const loaiHoaList = Array.isArray(data) ? data : [data];
+                renderLoaiHoaTable(loaiHoaList);
+                updateStats(loaiHoaList);
+            }).fail(function(xhr) {
+                console.error('Lỗi tải loại hoa:', xhr.responseText);
+                $('#tbodyLoaiHoa').html('<tr><td colspan="5" class="text-center text-danger">Lỗi tải dữ liệu</td></tr>');
+            });
+        }
+
+        function renderLoaiHoaTable(loaiHoaList) {
+            const tbody = $('#tbodyLoaiHoa');
+            tbody.empty();
+
+            if (loaiHoaList.length === 0) {
+                tbody.append(`
+                    <tr>
+                        <td colspan="5" class="text-center py-4">
+                            <i class="bi bi-inbox fa-2x text-muted mb-3"></i>
+                            <p class="text-muted">Không có dữ liệu loại hoa</p>
+                            <button class="btn btn-primary-custom mt-2" data-bs-toggle="modal" data-bs-target="#modalLoaiHoa">
+                                Thêm loại hoa đầu tiên
+                            </button>
+                        </td>
+                    </tr>
+                `);
+                return;
+            }
+
+            loaiHoaList.forEach(loai => {
+                const tr = `
+                    <tr>
+                        <td>
+                            <span class="badge-loaihoa">#${loai.MaLoai}</span>
+                        </td>
+                        <td>
+                            <strong>${loai.TenLoai}</strong>
+                        </td>
+                        <td>
+                            ${loai.MoTa ? 
+                                `<span class="text-muted">${loai.MoTa}</span>` : 
+                                '<span class="text-muted fst-italic">Không có mô tả</span>'
+                            }
+                        </td>
+                        <td>
+                            <small class="text-muted">${formatDate(loai.CreatedAt)}</small>
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-warning me-1" onclick="editLoaiHoa(${loai.MaLoai})">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteLoaiHoa(${loai.MaLoai})">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tbody.append(tr);
+            });
+        }
+
+        function updateStats(loaiHoaList) {
+            $('#totalLoaiHoa').text(loaiHoaList.length);
+        }
+
+        // Thêm loại hoa
+        $('#btnSaveLoaiHoa').click(function() {
+            const tenLoai = $('#TenLoai').val().trim();
+            if (!tenLoai) {
+                alert('Vui lòng nhập tên loại hoa');
+                return;
+            }
+
+            const formData = {
+                TenLoai: tenLoai,
+                MoTa: $('#MoTa').val().trim()
+            };
+
+            const maLoai = $('#MaLoai').val();
+            const url = '../api/loaihoa.php';
+            const method = maLoai ? 'PUT' : 'POST';
+
+            if (maLoai) {
+                formData.MaLoai = maLoai;
+            }
+
+            $('#btnSaveLoaiHoa').prop('disabled', true).html('<i class="bi bi-spinner spinner-border-sm"></i> Đang lưu...');
+
+            $.ajax({
+                url: url,
+                type: method,
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    $('#modalLoaiHoa').modal('hide');
+                    loadLoaiHoa();
+                    alert(method === 'POST' ? 'Thêm loại hoa thành công!' : 'Cập nhật loại hoa thành công!');
+                },
+                error: function(xhr) {
+                    let errorMsg = 'Lỗi không xác định';
+                    try {
+                        const errorResponse = JSON.parse(xhr.responseText);
+                        errorMsg = errorResponse.error || errorResponse.message || xhr.responseText;
+                    } catch (e) {
+                        errorMsg = xhr.responseText || 'Lỗi kết nối';
+                    }
+                    alert('Lỗi: ' + errorMsg);
+                },
+                complete: function() {
+                    $('#btnSaveLoaiHoa').prop('disabled', false).html('Lưu');
+                }
+            });
+        });
+
+        // Sửa loại hoa
+        function editLoaiHoa(maLoai) {
+            $.get(`../api/loaihoa.php?MaLoai=${maLoai}`, function(loai) {
+                $('#MaLoai').val(loai.MaLoai);
+                $('#TenLoai').val(loai.TenLoai);
+                $('#MoTa').val(loai.MoTa);
+                $('#modalLoaiHoaTitle').text('Sửa Thông Tin Loại Hoa');
+                $('#modalLoaiHoa').modal('show');
+            });
+        }
+
+        // Xóa loại hoa
+        function deleteLoaiHoa(maLoai) {
+            if (!confirm('Bạn có chắc chắn muốn xóa loại hoa này?\n\nLưu ý: Không thể xóa nếu có hoa thuộc loại này.')) {
+                return;
+            }
+
+            $.ajax({
+                url: `../api/loaihoa.php?MaLoai=${maLoai}`,
+                type: 'DELETE',
+                success: function(response) {
+                    alert('Xóa loại hoa thành công!');
+                    loadLoaiHoa();
+                },
+                error: function(xhr) {
+                    let errorMsg = 'Lỗi không xác định';
+                    try {
+                        const errorResponse = JSON.parse(xhr.responseText);
+                        errorMsg = errorResponse.error || errorResponse.message || xhr.responseText;
+                    } catch (e) {
+                        errorMsg = xhr.responseText || 'Lỗi kết nối';
+                    }
+                    alert('Lỗi: ' + errorMsg);
+                }
+            });
+        }
+
+        // Tìm kiếm
+        $('#searchLoaiHoa').on('input', function() {
+            const keyword = $(this).val().toLowerCase();
+            $('#tbodyLoaiHoa tr').each(function() {
+                const text = $(this).text().toLowerCase();
+                $(this).toggle(text.includes(keyword));
+            });
+        });
+
+        // Reset form khi modal đóng
+        $('#modalLoaiHoa').on('hidden.bs.modal', function() {
+            $('#formLoaiHoa')[0].reset();
+            $('#MaLoai').val('');
+            $('#modalLoaiHoaTitle').text('Thêm Loại Hoa Mới');
+        });
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('vi-VN');
+            } catch (e) {
+                return 'N/A';
+            }
+        }
+
+        function dangXuat() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        $(document).ready(function() {
+            kiemTraDangNhap();
+            loadLoaiHoa();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý - Flower'Lna</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+    <!-- Google Font & Custom CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #faf9f7;
+            font-family: 'Roboto', sans-serif;
+            color: #2f2f2f;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: #b08c3a;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .contact-info {
+            text-align: right;
+            color: #7c7c7c;
+            font-size: 14px;
+        }
+
+        /* MENU */
+        .navbar {
+            background-color: #fff8f0 !important;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .navbar-nav .nav-link {
+            color: #3b2d1f !important;
+            font-weight: 500;
+            font-size: 16px;
+            margin: 0 10px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #b08c3a !important;
+        }
+
+        /* SIDEBAR - GIỐNG STYLE TRANG CHỦ */
+        .sidebar {
+            background: #fff;
+            border-right: 1px solid #eee;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+            min-height: calc(100vh - 140px);
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            background: linear-gradient(135deg, #fff8f0 0%, #fff 100%);
+        }
+
+        .sidebar .nav-link {
+            color: #3b2d1f;
+            padding: 15px 20px;
+            margin: 5px 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: #fff8f0;
+            color: #b08c3a;
+            transform: translateX(5px);
+        }
+
+        .sidebar .nav-link.active {
+            background: linear-gradient(135deg, #b08c3a 0%, #d4af37 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(176, 140, 58, 0.3);
+        }
+
+        .sidebar .nav-link i {
+            width: 20px;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            background: #faf9f7;
+            min-height: calc(100vh - 140px);
+            padding: 30px;
+        }
+
+        .page-header {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eee;
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            color: #b08c3a;
+            margin-bottom: 5px;
+        }
+
+        .page-subtitle {
+            color: #7c7c7c;
+            font-size: 16px;
+        }
+
+        /* STATS CARDS - GIỐNG STYLE TRANG CHỦ */
+        .stats-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .stats-card.primary {
+            border-left: 4px solid #b08c3a;
+        }
+
+        .stats-card.success {
+            border-left: 4px solid #28a745;
+        }
+
+        .stats-card.warning {
+            border-left: 4px solid #ffc107;
+        }
+
+        .stats-card.info {
+            border-left: 4px solid #17a2b8;
+        }
+
+        .stats-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2f2f2f;
+            margin-bottom: 5px;
+        }
+
+        .stats-label {
+            color: #7c7c7c;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stats-icon {
+            font-size: 40px;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .stats-card.primary .stats-icon { color: #b08c3a; }
+        .stats-card.success .stats-icon { color: #28a745; }
+        .stats-card.warning .stats-icon { color: #ffc107; }
+        .stats-card.info .stats-icon { color: #17a2b8; }
+
+        /* QUICK ACTIONS */
+        .quick-actions {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eee;
+        }
+
+        .action-btn {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            color: #2f2f2f;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 15px;
+            height: 100%;
+        }
+
+        .action-btn:hover {
+            border-color: #b08c3a;
+            background-color: #fff8f0;
+            transform: translateY(-3px);
+            color: #b08c3a;
+            text-decoration: none;
+        }
+
+        .action-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #b08c3a;
+        }
+
+        .action-text {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* USER INFO */
+        .user-info {
+            background: linear-gradient(135deg, #b08c3a 0%, #d4af37 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .user-welcome {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* BUTTONS - GIỐNG STYLE TRANG CHỦ */
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #b08c3a 0%, #d4af37 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 25px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(176, 140, 58, 0.4);
+            color: white;
+        }
+
+        .btn-outline-custom {
+            border: 2px solid #b08c3a;
+            border-radius: 25px;
+            padding: 8px 23px;
+            color: #b08c3a;
+            font-weight: 600;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-custom:hover {
+            background: #b08c3a;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* FOOTER */
+        footer {
+            background: #1e1a16;
+            color: #d4c7a0;
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 50px;
+        }
+
+        footer h5 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        footer p {
+            font-size: 14px;
+            color: #b9a97d;
+        }
+
+        footer a {
+            color: #d4af37;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 18px;
+        }
+
+        footer a:hover {
+            color: #fff;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .sidebar {
+                min-height: auto;
+                margin-bottom: 20px;
+            }
+            
+            .main-content {
+                padding: 20px 15px;
+            }
+            
+            .page-header {
+                padding: 20px;
+            }
+            
+            .page-title {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .main-content {
+                padding: 15px 10px;
+            }
+            
+            .page-header {
+                padding: 15px;
+            }
+            
+            .stats-card {
+                padding: 20px;
+            }
+            
+            .stats-number {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER - GIỐNG CÁC TRANG KHÁC -->
+    <header class="container-fluid">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="index.html" class="logo text-decoration-none">🌸 Flower'Lna</a>
+            <div class="contact-info">
+                Hotline: <strong>1800 88 88 88</strong><br>
+                Flower'Lna.vn | contact@FlowerLna.vn
+            </div>
+        </div>
+    </header>
+
+    <!-- MENU - GIỐNG CÁC TRANG KHÁC -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Bộ sưu tập</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Dịch vụ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Khuyến mãi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Liên hệ</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- SIDEBAR -->
+            <div class="col-md-3 col-lg-2 sidebar">
+                <div class="sidebar-header">
+                    <h5 class="mb-0">🌸 Flower'Lna</h5>
+                    <small class="text-muted">Admin Panel</small>
+                </div>
+                <nav class="nav flex-column mt-4">
+                    <a class="nav-link active" href="quanli.html">
+                        <i class="bi bi-speedometer2"></i>Dashboard
+                    </a>
+                    <a class="nav-link" href="hoa.html">
+                        <i class="bi bi-flower1"></i>Quản lý Hoa
+                    </a>
+                    <a class="nav-link" href="loaihoa.html">
+                        <i class="bi bi-tags"></i>Loại Hoa
+                    </a>
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-people"></i>Khách hàng
+                    </a>
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-box-seam"></i>Đơn hàng
+                    </a>
+                    <div class="user-info mt-4">
+                        <div class="user-welcome">Xin chào</div>
+                        <div class="user-name" id="adminName">Admin</div>
+                    </div>
+                    <button class="btn btn-outline-custom mt-3 w-100" onclick="dangXuat()">
+                        <i class="bi bi-box-arrow-right me-2"></i>Đăng xuất
+                    </button>
+                </nav>
+            </div>
+
+            <!-- MAIN CONTENT AREA -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="page-title">Dashboard Quản lý</h1>
+                    <p class="page-subtitle">Tổng quan về hoạt động cửa hàng</p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="row">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stats-card primary">
+                            <div class="stats-icon">
+                                <i class="bi bi-flower1"></i>
+                            </div>
+                            <div class="stats-number" id="totalHoa">0</div>
+                            <div class="stats-label">Tổng sản phẩm</div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stats-card success">
+                            <div class="stats-icon">
+                                <i class="bi bi-tags"></i>
+                            </div>
+                            <div class="stats-number" id="totalLoai">0</div>
+                            <div class="stats-label">Loại hoa</div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stats-card warning">
+                            <div class="stats-icon">
+                                <i class="bi bi-people"></i>
+                            </div>
+                            <div class="stats-number" id="totalUsers">0</div>
+                            <div class="stats-label">Người dùng</div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stats-card info">
+                            <div class="stats-icon">
+                                <i class="bi bi-cart"></i>
+                            </div>
+                            <div class="stats-number" id="totalOrders">0</div>
+                            <div class="stats-label">Đơn hàng</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions mt-4">
+                    <h5 class="mb-4">Thao tác nhanh</h5>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <a href="hoa.html" class="action-btn">
+                                <div class="action-icon">
+                                    <i class="bi bi-plus-circle"></i>
+                                </div>
+                                <div class="action-text">Thêm hoa mới</div>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <a href="loaihoa.html" class="action-btn">
+                                <div class="action-icon">
+                                    <i class="bi bi-tag"></i>
+                                </div>
+                                <div class="action-text">Quản lý loại hoa</div>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <a href="#" class="action-btn">
+                                <div class="action-icon">
+                                    <i class="bi bi-person-plus"></i>
+                                </div>
+                                <div class="action-text">Thêm người dùng</div>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <a href="#" class="action-btn">
+                                <div class="action-icon">
+                                    <i class="bi bi-graph-up"></i>
+                                </div>
+                                <div class="action-text">Xem báo cáo</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER - GIỐNG CÁC TRANG KHÁC -->
+    <footer>
+        <div class="container">
+            <h5>Flower'Lna - Hoa Thượng Lưu</h5>
+            <p>Địa chỉ: 88 Nguyễn Huệ, Quận 1, TP.HCM<br>
+            Hotline: 1800 88 88 88 | Email: contact@FlowerLna.vn</p>
+            <div>
+                <a href="#"><i class="bi bi-facebook"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
+                <a href="#"><i class="bi bi-twitter"></i></a>
+            </div>
+            <p class="mt-3">&copy; 2025 Flower'Lna. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS + jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // DEBUG: Kiểm tra dữ liệu đăng nhập
+        console.log('=== DEBUG THÔNG TIN ĐĂNG NHẬP ===');
+        console.log('daDangNhap:', localStorage.getItem('daDangNhap'));
+        console.log('nguoiDung:', localStorage.getItem('nguoiDung'));
+        console.log('vaiTroDangNhap:', localStorage.getItem('vaiTroDangNhap'));
+
+        // Kiểm tra đăng nhập - PHIÊN BẢN ĐÃ SỬA
+        function kiemTraDangNhap() {
+            const nguoiDung = localStorage.getItem('nguoiDung');
+            const daDangNhap = localStorage.getItem('daDangNhap');
+            
+            console.log('🔍 Kiểm tra đăng nhập:', { 
+                daDangNhap: daDangNhap,
+                nguoiDung: nguoiDung 
+            });
+            
+            // Kiểm tra nghiêm ngặt hơn
+            if (!daDangNhap || daDangNhap !== 'true' || !nguoiDung) {
+                console.log('❌ Chưa đăng nhập, chuyển hướng đến login');
+                window.location.href = 'login.html';
+                return false;
+            }
+
+            try {
+                const user = JSON.parse(nguoiDung);
+                console.log('👤 Thông tin user từ localStorage:', user);
+                
+                // Kiểm tra vai trò
+                if (user.VaiTro !== 'quantri') {
+                    console.log('🚫 User không phải admin, chuyển hướng về trang chủ');
+                    alert('Bạn không có quyền truy cập trang quản trị!');
+                    window.location.href = 'index.html';
+                    return false;
+                }
+                
+                // Hiển thị tên admin
+                $('#adminName').text(user.HoTen || user.Email || 'Admin');
+                console.log('✅ Đã xác thực thành công với quyền admin');
+                return true;
+                
+            } catch (e) {
+                console.error('❌ Lỗi parse user data:', e);
+                window.location.href = 'login.html';
+                return false;
+            }
+        }
+
+        // Load thống kê
+        function loadThongKe() {
+            // Load tổng hoa
+            $.get('api/hoa.php', function(data) {
+                $('#totalHoa').text(Array.isArray(data) ? data.length : 1);
+            }).fail(function(xhr) {
+                console.error('Lỗi tải hoa:', xhr.responseText);
+            });
+
+            // Load tổng loại hoa
+            $.get('api/loaihoa.php', function(data) {
+                $('#totalLoai').text(Array.isArray(data) ? data.length : 1);
+            }).fail(function(xhr) {
+                console.error('Lỗi tải loại hoa:', xhr.responseText);
+            });
+
+            // Load tổng người dùng
+            $.get('api/nguoidung.php', function(data) {
+                $('#totalUsers').text(Array.isArray(data) ? data.length : 1);
+            }).fail(function(xhr) {
+                console.error('Lỗi tải người dùng:', xhr.responseText);
+            });
+
+            // Tạm thời set đơn hàng = 0
+            $('#totalOrders').text('0');
+        }
+
+        function dangXuat() {
+            localStorage.removeItem('nguoiDung');
+            localStorage.removeItem('daDangNhap');
+            localStorage.removeItem('vaiTroDangNhap');
+            window.location.href = 'login.html';
+        }
+
+        $(document).ready(function() {
+            if (!kiemTraDangNhap()) {
+                return;
+            }
+            loadThongKe();
+        });
+    </script>
+</body>
+</html>
