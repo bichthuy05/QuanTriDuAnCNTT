@@ -3,831 +3,268 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản Lý Khách Hàng - Flower'Lna</title>
-
-  <!-- Bootstrap CSS -->
+  <title>Quản lý Khách hàng - Flower'Lna</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-  <!-- Google Font & Custom CSS -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-
   <style>
-    body {
-      background-color: #faf9f7;
-      font-family: 'Roboto', sans-serif;
-      color: #2f2f2f;
-    }
-
-    /* HEADER */
-    header {
-      background: #fff;
-      border-bottom: 1px solid #eee;
-      padding: 15px 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-
-    .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      color: #b08c3a;
-      font-weight: 700;
-      letter-spacing: 2px;
-    }
-
-    .contact-info {
-      text-align: right;
-      color: #7c7c7c;
-      font-size: 14px;
-    }
-
-    /* MENU */
-    .navbar {
-      background-color: #fff8f0 !important;
-      border-top: 1px solid #eee;
-      border-bottom: 1px solid #eee;
-    }
-
-    .navbar-nav .nav-link {
-      color: #3b2d1f !important;
-      font-weight: 500;
-      font-size: 16px;
-      margin: 0 10px;
-      transition: 0.3s;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .navbar-nav .nav-link:hover {
-      color: #b08c3a !important;
-    }
-
-    /* PAGE HEADER */
-    .page-header {
-      background: linear-gradient(rgba(176, 140, 58, 0.1), rgba(176, 140, 58, 0.05));
-      padding: 40px 0;
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .page-header h1 {
-      font-family: 'Playfair Display', serif;
-      color: #b08c3a;
-      font-size: 36px;
-      margin-bottom: 10px;
-    }
-
-    .page-header p {
-      color: #7c7c7c;
-      font-size: 16px;
-    }
-
-    /* CUSTOMER CONTENT */
-    .customer-card {
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      padding: 25px;
-      margin-bottom: 30px;
-      border-top: 3px solid #b08c3a;
-    }
-
-    .customer-card h3 {
-      font-family: 'Playfair Display', serif;
-      color: #b08c3a;
-      font-size: 22px;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #eee;
-    }
-
-    .customer-summary {
-      background: #fff8f0;
-      border-radius: 10px;
-      padding: 20px;
-      margin-top: 20px;
-    }
-
-    .customer-summary h4 {
-      font-family: 'Playfair Display', serif;
-      color: #b08c3a;
-      font-size: 20px;
-      margin-bottom: 15px;
-    }
-
-    .btn-luxe {
-      padding: 12px 35px;
-      background-color: #b08c3a;
-      color: #fff;
-      border: none;
-      font-weight: 600;
-      border-radius: 30px;
-      transition: 0.3s;
-    }
-
-    .btn-luxe:hover {
-      background-color: #d4af37;
-      transform: translateY(-2px);
-    }
-
-    .btn-outline-luxe {
-      padding: 12px 35px;
-      background-color: transparent;
-      color: #b08c3a;
-      border: 2px solid #b08c3a;
-      font-weight: 600;
-      border-radius: 30px;
-      transition: 0.3s;
-    }
-
-    .btn-outline-luxe:hover {
-      background-color: #b08c3a;
-      color: #fff;
-    }
-
-    .customer-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .customer-table th {
-      background-color: #fff8f0;
-      color: #b08c3a;
-      font-weight: 600;
-      padding: 12px 15px;
-      text-align: left;
-      border-bottom: 2px solid #b08c3a;
-    }
-
-    .customer-table td {
-      padding: 12px 15px;
-      border-bottom: 1px solid #eee;
-    }
-
-    .customer-table tr:hover {
-      background-color: #faf9f7;
-    }
-
-    .action-buttons .btn {
-      margin-right: 5px;
-      margin-bottom: 5px;
-    }
-
-    /* MODAL STYLES */
-    .modal-header {
-      background-color: #fff8f0;
-      border-bottom: 1px solid #b08c3a;
-    }
-
-    .modal-title {
-      font-family: 'Playfair Display', serif;
-      color: #b08c3a;
-    }
-
-    .modal-footer {
-      border-top: 1px solid #eee;
-    }
-
-    /* FOOTER */
-    footer {
-      background: #1e1a16;
-      color: #d4c7a0;
-      text-align: center;
-      padding: 40px 0;
-      margin-top: 50px;
-    }
-
-    footer h5 {
-      font-family: 'Playfair Display', serif;
-      font-size: 20px;
-      margin-bottom: 15px;
-    }
-
-    footer p {
-      font-size: 14px;
-      color: #b9a97d;
-    }
-
-    footer a {
-      color: #d4af37;
-      text-decoration: none;
-      margin: 0 10px;
-      font-size: 18px;
-    }
-
-    footer a:hover {
-      color: #fff;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 30px;
-      color: #b08c3a;
-    }
-
-    .alert-luxe {
-      background-color: #fff8f0;
-      border-left: 4px solid #b08c3a;
-      color: #3b2d1f;
-    }
-
-    .customer-badge {
-      display: inline-block;
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 500;
-      background-color: #e8f5e9;
-      color: #2e7d32;
-    }
+    body { background-color: #faf9f7; font-family: 'Roboto', sans-serif; color: #2f2f2f; }
+    header { background: #fff; border-bottom: 1px solid #eee; padding: 15px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .logo { font-family: 'Playfair Display', serif; font-size: 28px; color: #b08c3a; font-weight: 700; letter-spacing: 2px; }
+    .navbar { background-color: #fff8f0 !important; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+    .navbar-nav .nav-link { color: #3b2d1f !important; font-weight: 500; text-transform: uppercase; margin: 0 10px; }
+    .navbar-nav .nav-link:hover { color: #b08c3a !important; }
+    .sidebar { background: #fff; border-right: 1px solid #eee; min-height: calc(100vh - 140px); box-shadow: 2px 0 8px rgba(0,0,0,0.05); }
+    .sidebar .nav-link { color: #3b2d1f; padding: 15px 20px; margin: 5px 15px; border-radius: 8px; transition: .3s; }
+    .sidebar .nav-link:hover { background-color: #fff8f0; color: #b08c3a; transform: translateX(5px); }
+    .sidebar .nav-link.active { background: linear-gradient(135deg,#b08c3a,#d4af37); color: white; }
+    .main-content { background: #faf9f7; padding: 30px; }
+    .page-title { font-family: 'Playfair Display', serif; font-size: 32px; color: #b08c3a; }
+    .btn-primary-custom { background: linear-gradient(135deg,#b08c3a,#d4af37); border:none; border-radius:25px; color:white; padding:10px 25px; }
+    .table-modern { background:white; border-radius:12px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.08); }
+    .table-modern thead { background:linear-gradient(135deg,#b08c3a,#d4af37); color:white; }
+    footer { background:#1e1a16; color:#d4c7a0; text-align:center; padding:40px 0; margin-top:50px; }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header class="container-fluid">
-    <div class="container d-flex justify-content-between align-items-center">
-      <div class="logo">🌸 Flower'Lna</div>
-      <div class="contact-info">
-        Hotline: <strong>1800 88 88 88</strong><br>
-        Flower'Lna.vn | contact@FlowerLna.vn
-      </div>
-    </div>
-  </header>
+<header class="container-fluid">
+  <div class="container d-flex justify-content-between align-items-center">
+    <a href="index.html" class="logo text-decoration-none">🌸 Flower'Lna</a>
+    <div class="contact-info">Hotline: <strong>1800 88 88 88</strong></div>
+  </div>
+</header>
 
-  <!-- MENU -->
-  <nav class="navbar navbar-expand-lg navbar-light">
-    <div class="container">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link" href="index.html">Trang chủ</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Bộ sưu tập</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Dịch vụ</a></li>
-          <li class="nav-item"><a class="nav-link" href="donhang.html">Đơn hàng</a></li>
-          <li class="nav-item"><a class="nav-link active" href="khachhang.html">Khách hàng</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Liên hệ</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <!-- PAGE HEADER -->
-  <section class="page-header">
-    <div class="container">
-      <h1>Quản Lý Khách Hàng</h1>
-      <p>Quản lý thông tin khách hàng của Flower'Lna</p>
-    </div>
-  </section>
-
-  <!-- CUSTOMER CONTENT -->
+<nav class="navbar navbar-expand-lg navbar-light">
   <div class="container">
-    <div class="row mb-4">
-      <div class="col-md-6">
-        <button class="btn btn-luxe" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
-          <i class="bi bi-person-plus me-2"></i>Thêm Khách Hàng Mới
+    <ul class="navbar-nav mx-auto">
+      <li class="nav-item"><a class="nav-link" href="index.html">Trang chủ</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Bộ sưu tập</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Dịch vụ</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Liên hệ</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <!-- SIDEBAR -->
+    <div class="col-md-3 col-lg-2 sidebar">
+      <div class="sidebar-header p-3 text-center">
+        <h5>🌸 Flower'Lna</h5>
+        <small class="text-muted">Admin Panel</small>
+      </div>
+      <nav class="nav flex-column mt-4">
+        <a class="nav-link" href="quanli.html"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
+        <a class="nav-link" href="hoa.html"><i class="bi bi-flower1 me-2"></i>Quản lý Hoa</a>
+        <a class="nav-link" href="loaihoa.html"><i class="bi bi-tags me-2"></i>Loại Hoa</a>
+        <a class="nav-link active" href="khachhang.html"><i class="bi bi-people me-2"></i>Khách hàng</a>
+        <a class="nav-link" href="donhang.html"><i class="bi bi-box-seam me-2"></i>Đơn hàng</a>
+      </nav>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="col-md-9 col-lg-10 main-content">
+      <div class="page-header mb-4 d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="page-title">Quản lý Khách hàng</h1>
+          <p class="text-muted">Danh sách khách hàng mua hoa tại cửa hàng</p>
+        </div>
+        <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#modalKhachHang">
+          <i class="bi bi-plus-circle me-2"></i>Thêm khách hàng
         </button>
       </div>
-      <div class="col-md-6 text-end">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Tìm kiếm khách hàng..." id="searchCustomer">
-          <button class="btn btn-outline-luxe" type="button" id="searchButton">
-            <i class="bi bi-search"></i>
-          </button>
-        </div>
-      </div>
-    </div>
 
-    <div class="customer-card">
-      <h3>Danh Sách Khách Hàng</h3>
-      
-      <div id="loadingMessage" class="loading">
-        <div class="spinner-border text-luxe" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-        <p class="mt-2">Đang tải dữ liệu...</p>
-      </div>
-      
-      <div id="customersTable" style="display: none;">
-        <div class="table-responsive">
-          <table class="customer-table">
-            <thead>
-              <tr>
-                <th>Mã KH</th>
-                <th>Tên Khách Hàng</th>
-                <th>Số Điện Thoại</th>
-                <th>Email</th>
-                <th>Địa Chỉ</th>
-                <th>Thao Tác</th>
-              </tr>
-            </thead>
-            <tbody id="customersList">
-              <!-- Customers will be populated here by JavaScript -->
-            </tbody>
-          </table>
-        </div>
-        
-        <div class="d-flex justify-content-between align-items-center mt-4">
-          <div id="customerCount">Hiển thị 0 khách hàng</div>
-          <nav>
-            <ul class="pagination" id="pagination">
-              <!-- Pagination will be generated here -->
-            </ul>
-          </nav>
+      <!-- TÌM KIẾM -->
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <div class="input-group">
+            <input type="text" id="searchKhachHang" class="form-control" placeholder="Tìm theo tên hoặc số điện thoại...">
+            <button class="btn btn-outline-secondary"><i class="bi bi-search"></i></button>
+          </div>
         </div>
       </div>
-      
-      <div id="errorMessage" class="alert alert-danger mt-3" style="display: none;">
-        Có lỗi xảy ra khi tải dữ liệu. Vui lòng thử lại sau.
-      </div>
-    </div>
-  </div>
 
-  <!-- Add Customer Modal -->
-  <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addCustomerModalLabel">Thêm Khách Hàng Mới</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="addCustomerForm">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="mb-3">
-                  <label for="customerName" class="form-label">Tên Khách Hàng *</label>
-                  <input type="text" class="form-control" id="customerName" required>
-                </div>
-                <div class="mb-3">
-                  <label for="customerPhone" class="form-label">Số Điện Thoại *</label>
-                  <input type="text" class="form-control" id="customerPhone" required>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="mb-3">
-                  <label for="customerEmail" class="form-label">Email</label>
-                  <input type="email" class="form-control" id="customerEmail">
-                </div>
-                <div class="mb-3">
-                  <label for="customerAddress" class="form-label">Địa Chỉ</label>
-                  <textarea class="form-control" id="customerAddress" rows="3"></textarea>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-          <button type="button" class="btn btn-luxe" id="saveCustomerBtn">Lưu Khách Hàng</button>
+      <!-- BẢNG KHÁCH HÀNG -->
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover table-modern">
+              <thead>
+                <tr>
+                  <th>Họ tên</th>
+                  <th>Email</th>
+                  <th>Điện thoại</th>
+                  <th>Giới tính</th>
+                  <th>Địa chỉ</th>
+                  <th>Ngày đăng ký</th>
+                  <th class="text-center" width="120">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyKhachHang">
+                <tr>
+                  <td colspan="7" class="text-center py-4 text-muted">Đang tải dữ liệu...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Edit Customer Modal -->
-  <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editCustomerModalLabel">Chỉnh Sửa Thông Tin Khách Hàng</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="editCustomerForm">
-            <input type="hidden" id="editCustomerId">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="mb-3">
-                  <label for="editCustomerName" class="form-label">Tên Khách Hàng *</label>
-                  <input type="text" class="form-control" id="editCustomerName" required>
-                </div>
-                <div class="mb-3">
-                  <label for="editCustomerPhone" class="form-label">Số Điện Thoại *</label>
-                  <input type="text" class="form-control" id="editCustomerPhone" required>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="mb-3">
-                  <label for="editCustomerEmail" class="form-label">Email</label>
-                  <input type="email" class="form-control" id="editCustomerEmail">
-                </div>
-                <div class="mb-3">
-                  <label for="editCustomerAddress" class="form-label">Địa Chỉ</label>
-                  <textarea class="form-control" id="editCustomerAddress" rows="3"></textarea>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-          <button type="button" class="btn btn-luxe" id="updateCustomerBtn">Cập Nhật</button>
-        </div>
-      </div>
-    </div>
+<footer>
+  <div class="container">
+    <h5>Flower'Lna - Hoa Thượng Lưu</h5>
+    <p>© 2025 Flower'Lna. All Rights Reserved.</p>
   </div>
+</footer>
 
-  <!-- Customer Detail Modal -->
-  <div class="modal fade" id="customerDetailModal" tabindex="-1" aria-labelledby="customerDetailModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="customerDetailModalLabel">Thông Tin Chi Tiết Khách Hàng</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="customerDetailContent">
-          <!-- Customer details will be populated here -->
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-        </div>
+<!-- MODAL THÊM/SỬA -->
+<div class="modal fade" id="modalKhachHang" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 id="modalTitle">Thêm Khách hàng</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="container">
-      <h5>Flower'Lna - Hoa Thượng Lưu</h5>
-      <p>Địa chỉ: 88 Nguyễn Huệ, Quận 1, TP.HCM<br>
-      Hotline: 1800 88 88 88 | Email: contact@FlowerLna.vn</p>
-      <div>
-        <a href="#"><i class="bi bi-facebook"></i></a>
-        <a href="#"><i class="bi bi-instagram"></i></a>
-        <a href="#"><i class="bi bi-twitter"></i></a>
-      </div>
-      <p class="mt-3">&copy; 2025 Flower'Lna. All Rights Reserved.</p>
-    </div>
-  </footer>
-
-  <!-- Bootstrap JS + jQuery -->
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-  <script>
-    // API Configuration
-    const API_BASE_URL = 'khachhang.php'; // Adjust path as needed
-    
-    // DOM Elements
-    const customersList = document.getElementById('customersList');
-    const customersTable = document.getElementById('customersTable');
-    const loadingMessage = document.getElementById('loadingMessage');
-    const errorMessage = document.getElementById('errorMessage');
-    const customerCount = document.getElementById('customerCount');
-    const pagination = document.getElementById('pagination');
-    const saveCustomerBtn = document.getElementById('saveCustomerBtn');
-    const updateCustomerBtn = document.getElementById('updateCustomerBtn');
-    const searchCustomer = document.getElementById('searchCustomer');
-    const searchButton = document.getElementById('searchButton');
-    
-    // Global variables
-    let customers = [];
-    let currentPage = 1;
-    const itemsPerPage = 10;
-    
-    // Initialize the page
-    document.addEventListener('DOMContentLoaded', function() {
-      loadCustomers();
-      
-      // Event listeners
-      saveCustomerBtn.addEventListener('click', addNewCustomer);
-      updateCustomerBtn.addEventListener('click', updateCustomer);
-      searchCustomer.addEventListener('input', filterCustomers);
-      searchButton.addEventListener('click', filterCustomers);
-    });
-    
-    // Load customers from API
-    function loadCustomers() {
-      loadingMessage.style.display = 'block';
-      customersTable.style.display = 'none';
-      errorMessage.style.display = 'none';
-      
-      fetch(API_BASE_URL, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        customers = data;
-        displayCustomers();
-        loadingMessage.style.display = 'none';
-        customersTable.style.display = 'block';
-      })
-      .catch(error => {
-        console.error('Error loading customers:', error);
-        loadingMessage.style.display = 'none';
-        errorMessage.style.display = 'block';
-      });
-    }
-    
-    // Display customers in the table
-    function displayCustomers(page = 1) {
-      currentPage = page;
-      
-      // Filter customers if search term exists
-      const searchTerm = searchCustomer.value.toLowerCase();
-      let filteredCustomers = customers;
-      
-      if (searchTerm) {
-        filteredCustomers = customers.filter(customer => 
-          customer.TenKhachHang.toLowerCase().includes(searchTerm) ||
-          customer.SoDienThoai.includes(searchTerm) ||
-          (customer.Email && customer.Email.toLowerCase().includes(searchTerm)) ||
-          (customer.DiaChi && customer.DiaChi.toLowerCase().includes(searchTerm))
-        );
-      }
-      
-      // Calculate pagination
-      const totalPages = Math.ceil(filteredCustomers.length / itemsPerPage);
-      const startIndex = (page - 1) * itemsPerPage;
-      const endIndex = Math.min(startIndex + itemsPerPage, filteredCustomers.length);
-      const currentCustomers = filteredCustomers.slice(startIndex, endIndex);
-      
-      // Update customer count
-      customerCount.textContent = `Hiển thị ${startIndex + 1}-${endIndex} của ${filteredCustomers.length} khách hàng`;
-      
-      // Clear current customers
-      customersList.innerHTML = '';
-      
-      // Add customers to table
-      if (currentCustomers.length === 0) {
-        customersList.innerHTML = `
-          <tr>
-            <td colspan="6" class="text-center py-4">
-              <div class="alert alert-luxe">
-                <i class="bi bi-info-circle me-2"></i>Không tìm thấy khách hàng nào.
-              </div>
-            </td>
-          </tr>
-        `;
-      } else {
-        currentCustomers.forEach(customer => {
-          const row = document.createElement('tr');
-          
-          row.innerHTML = `
-            <td>#${customer.MaKhachHang}</td>
-            <td>
-              ${customer.TenKhachHang}
-              ${customer.Email ? '<span class="customer-badge ms-2">VIP</span>' : ''}
-            </td>
-            <td>${customer.SoDienThoai || 'Chưa có'}</td>
-            <td>${customer.Email || 'Chưa có'}</td>
-            <td>${customer.DiaChi || 'Chưa có'}</td>
-            <td class="action-buttons">
-              <button class="btn btn-sm btn-outline-luxe" onclick="viewCustomerDetails(${customer.MaKhachHang})">
-                <i class="bi bi-eye"></i>
-              </button>
-              <button class="btn btn-sm btn-outline-luxe" onclick="editCustomer(${customer.MaKhachHang})">
-                <i class="bi bi-pencil"></i>
-              </button>
-              <button class="btn btn-sm btn-outline-danger" onclick="deleteCustomer(${customer.MaKhachHang})">
-                <i class="bi bi-trash"></i>
-              </button>
-            </td>
-          `;
-          
-          customersList.appendChild(row);
-        });
-      }
-      
-      // Generate pagination
-      generatePagination(totalPages, page);
-    }
-    
-    // Generate pagination controls
-    function generatePagination(totalPages, currentPage) {
-      pagination.innerHTML = '';
-      
-      // Previous button
-      const prevLi = document.createElement('li');
-      prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
-      prevLi.innerHTML = `<a class="page-link" href="#" onclick="displayCustomers(${currentPage - 1})">Trước</a>`;
-      pagination.appendChild(prevLi);
-      
-      // Page numbers
-      const maxVisiblePages = 5;
-      let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-      let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-      
-      if (endPage - startPage + 1 < maxVisiblePages) {
-        startPage = Math.max(1, endPage - maxVisiblePages + 1);
-      }
-      
-      for (let i = startPage; i <= endPage; i++) {
-        const pageLi = document.createElement('li');
-        pageLi.className = `page-item ${i === currentPage ? 'active' : ''}`;
-        pageLi.innerHTML = `<a class="page-link" href="#" onclick="displayCustomers(${i})">${i}</a>`;
-        pagination.appendChild(pageLi);
-      }
-      
-      // Next button
-      const nextLi = document.createElement('li');
-      nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
-      nextLi.innerHTML = `<a class="page-link" href="#" onclick="displayCustomers(${currentPage + 1})">Sau</a>`;
-      pagination.appendChild(nextLi);
-    }
-    
-    // Filter customers based on search term
-    function filterCustomers() {
-      displayCustomers(1);
-    }
-    
-    // Add new customer
-    function addNewCustomer() {
-      const customerName = document.getElementById('customerName').value;
-      const customerPhone = document.getElementById('customerPhone').value;
-      const customerEmail = document.getElementById('customerEmail').value;
-      const customerAddress = document.getElementById('customerAddress').value;
-      
-      const newCustomer = {
-        TenKhachHang: customerName,
-        SoDienThoai: customerPhone,
-        Email: customerEmail || '',
-        DiaChi: customerAddress || ''
-      };
-      
-      fetch(API_BASE_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newCustomer)
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          // Close modal and reset form
-          const modal = bootstrap.Modal.getInstance(document.getElementById('addCustomerModal'));
-          modal.hide();
-          document.getElementById('addCustomerForm').reset();
-          
-          // Reload customers
-          loadCustomers();
-          
-          // Show success message
-          alert('Thêm khách hàng thành công!');
-        } else {
-          alert('Có lỗi xảy ra khi thêm khách hàng: ' + data.message);
-        }
-      })
-      .catch(error => {
-        console.error('Error adding customer:', error);
-        alert('Có lỗi xảy ra khi thêm khách hàng.');
-      });
-    }
-    
-    // View customer details
-    function viewCustomerDetails(customerId) {
-      fetch(`${API_BASE_URL}?MaKhachHang=${customerId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => response.json())
-      .then(customer => {
-        const detailContent = `
+      <div class="modal-body">
+        <form id="formKhachHang">
+          <input type="hidden" id="MaKH">
           <div class="row">
-            <div class="col-md-6">
-              <h5>Thông Tin Cá Nhân</h5>
-              <p><strong>Mã KH:</strong> #${customer.MaKhachHang}</p>
-              <p><strong>Tên:</strong> ${customer.TenKhachHang}</p>
-              <p><strong>SĐT:</strong> ${customer.SoDienThoai || 'Chưa có'}</p>
-              <p><strong>Email:</strong> ${customer.Email || 'Chưa có'}</p>
+            <div class="col-md-6 mb-3">
+              <label>Họ tên</label>
+              <input type="text" class="form-control" id="HoTen" required>
             </div>
-            <div class="col-md-6">
-              <h5>Địa Chỉ</h5>
-              <p>${customer.DiaChi || 'Chưa có thông tin địa chỉ'}</p>
+            <div class="col-md-6 mb-3">
+              <label>Email</label>
+              <input type="email" class="form-control" id="Email">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label>Điện thoại</label>
+              <input type="text" class="form-control" id="DienThoai" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label>Giới tính</label>
+              <select id="GioiTinh" class="form-select">
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+              </select>
+            </div>
+            <div class="col-12 mb-3">
+              <label>Địa chỉ</label>
+              <input type="text" class="form-control" id="DiaChi">
             </div>
           </div>
-          <div class="mt-4">
-            <h5>Lịch Sử Đơn Hàng</h5>
-            <div class="alert alert-luxe">
-              <i class="bi bi-info-circle me-2"></i>
-              Thông tin lịch sử đơn hàng sẽ được hiển thị ở đây khi có kết nối với API đơn hàng.
-            </div>
-          </div>
-        `;
-        
-        document.getElementById('customerDetailContent').innerHTML = detailContent;
-        
-        const modal = new bootstrap.Modal(document.getElementById('customerDetailModal'));
-        modal.show();
-      })
-      .catch(error => {
-        console.error('Error loading customer details:', error);
-        alert('Có lỗi xảy ra khi tải chi tiết khách hàng.');
-      });
-    }
-    
-    // Edit customer
-    function editCustomer(customerId) {
-      fetch(`${API_BASE_URL}?MaKhachHang=${customerId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => response.json())
-      .then(customer => {
-        // Populate form with customer data
-        document.getElementById('editCustomerId').value = customer.MaKhachHang;
-        document.getElementById('editCustomerName').value = customer.TenKhachHang;
-        document.getElementById('editCustomerPhone').value = customer.SoDienThoai || '';
-        document.getElementById('editCustomerEmail').value = customer.Email || '';
-        document.getElementById('editCustomerAddress').value = customer.DiaChi || '';
-        
-        // Show edit modal
-        const modal = new bootstrap.Modal(document.getElementById('editCustomerModal'));
-        modal.show();
-      })
-      .catch(error => {
-        console.error('Error loading customer for edit:', error);
-        alert('Có lỗi xảy ra khi tải thông tin khách hàng.');
-      });
-    }
-    
-    // Update customer
-    function updateCustomer() {
-      const customerId = document.getElementById('editCustomerId').value;
-      const customerName = document.getElementById('editCustomerName').value;
-      const customerPhone = document.getElementById('editCustomerPhone').value;
-      const customerEmail = document.getElementById('editCustomerEmail').value;
-      const customerAddress = document.getElementById('editCustomerAddress').value;
-      
-      const updatedCustomer = {
-        MaKhachHang: customerId,
-        TenKhachHang: customerName,
-        SoDienThoai: customerPhone,
-        Email: customerEmail || '',
-        DiaChi: customerAddress || ''
-      };
-      
-      fetch(API_BASE_URL, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updatedCustomer)
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          // Close modal
-          const modal = bootstrap.Modal.getInstance(document.getElementById('editCustomerModal'));
-          modal.hide();
-          
-          // Reload customers
-          loadCustomers();
-          
-          // Show success message
-          alert('Cập nhật thông tin khách hàng thành công!');
-        } else {
-          alert('Có lỗi xảy ra khi cập nhật khách hàng: ' + data.message);
-        }
-      })
-      .catch(error => {
-        console.error('Error updating customer:', error);
-        alert('Có lỗi xảy ra khi cập nhật khách hàng.');
-      });
-    }
-    
-    // Delete customer
-    function deleteCustomer(customerId) {
-      if (confirm(`Bạn có chắc chắn muốn xóa khách hàng #${customerId}?`)) {
-        fetch(API_BASE_URL, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ MaKhachHang: customerId })
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            // Reload customers
-            loadCustomers();
-            alert('Xóa khách hàng thành công!');
-          } else {
-            alert('Có lỗi xảy ra khi xóa khách hàng: ' + data.message);
-          }
-        })
-        .catch(error => {
-          console.error('Error deleting customer:', error);
-          alert('Có lỗi xảy ra khi xóa khách hàng.');
-        });
-      }
-    }
-  </script>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        <button class="btn btn-primary-custom" id="btnSaveKH">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const API_KH = '../api/khachhang.php';
+
+function loadKhachHang() {
+  $.get(API_KH, function(data) {
+    const list = Array.isArray(data) ? data : [];
+    renderTable(list);
+  }).fail(err => {
+    $('#tbodyKhachHang').html('<tr><td colspan="7" class="text-danger text-center">Lỗi tải dữ liệu</td></tr>');
+    console.error(err.responseText);
+  });
+}
+
+function renderTable(list) {
+  const tbody = $('#tbodyKhachHang').empty();
+  if (list.length === 0) {
+    tbody.append('<tr><td colspan="7" class="text-center text-muted py-3">Chưa có khách hàng nào</td></tr>');
+    return;
+  }
+  list.forEach(kh => {
+    tbody.append(`
+      <tr>
+        <td>${kh.HoTen}</td>
+        <td>${kh.Email || '-'}</td>
+        <td>${kh.DienThoai}</td>
+        <td>${kh.GioiTinh || '-'}</td>
+        <td>${kh.DiaChi || '-'}</td>
+        <td>${kh.NgayDangKy || '-'}</td>
+        <td class="text-center">
+          <button class="btn btn-sm btn-warning me-1" onclick="editKH(${kh.MaKH})"><i class="bi bi-pencil"></i></button>
+          <button class="btn btn-sm btn-danger" onclick="deleteKH(${kh.MaKH})"><i class="bi bi-trash"></i></button>
+        </td>
+      </tr>
+    `);
+  });
+}
+
+function saveKH() {
+  const data = {
+    HoTen: $('#HoTen').val(),
+    Email: $('#Email').val(),
+    DienThoai: $('#DienThoai').val(),
+    GioiTinh: $('#GioiTinh').val(),
+    DiaChi: $('#DiaChi').val()
+  };
+  const id = $('#MaKH').val();
+  const method = id ? 'PUT' : 'POST';
+  if (id) data.MaKH = id;
+
+  $.ajax({
+    url: API_KH,
+    type: method,
+    data: JSON.stringify(data),
+    contentType: 'application/json',
+    success: function() {
+      $('#modalKhachHang').modal('hide');
+      loadKhachHang();
+      alert(id ? 'Cập nhật thành công!' : 'Thêm khách hàng thành công!');
+    },
+    error: function(xhr) { alert('Lỗi: ' + xhr.responseText); }
+  });
+}
+
+function editKH(id) {
+  $.get(API_KH + '?MaKH=' + id, function(kh) {
+    $('#MaKH').val(kh.MaKH);
+    $('#HoTen').val(kh.HoTen);
+    $('#Email').val(kh.Email);
+    $('#DienThoai').val(kh.DienThoai);
+    $('#GioiTinh').val(kh.GioiTinh);
+    $('#DiaChi').val(kh.DiaChi);
+    $('#modalTitle').text('Sửa Khách hàng');
+    $('#modalKhachHang').modal('show');
+  });
+}
+
+function deleteKH(id) {
+  if (!confirm('Bạn có chắc muốn xóa khách hàng này?')) return;
+  $.ajax({
+    url: API_KH + '?MaKH=' + id,
+    type: 'DELETE',
+    success: function() { alert('Đã xóa!'); loadKhachHang(); },
+    error: function(xhr) { alert('Lỗi: ' + xhr.responseText); }
+  });
+}
+
+$('#btnSaveKH').click(saveKH);
+
+$('#searchKhachHang').on('input', function() {
+  const keyword = $(this).val().toLowerCase();
+  $('#tbodyKhachHang tr').filter(function() {
+    $(this).toggle($(this).text().toLowerCase().includes(keyword));
+  });
+});
+
+$(document).ready(loadKhachHang);
+</script>
 </body>
 </html>
