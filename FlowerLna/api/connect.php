@@ -4,7 +4,7 @@
 // ------------------------------------------
 
 // Server MySQL (thường là localhost khi dùng XAMPP)
-$servername = "localhost";
+$servername = "127.0.0.1";
 
 // Tên người dùng MySQL mặc định trong XAMPP
 $username = "root";
